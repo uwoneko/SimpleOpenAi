@@ -1,0 +1,12 @@
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/bin/Release/net7.0/SimpleOpenAi.deps.json
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/bin/Release/net7.0/SimpleOpenAi.dll
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/bin/Release/net7.0/SimpleOpenAi.pdb
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.csproj.AssemblyReference.cache
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.GeneratedMSBuildEditorConfig.editorconfig
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.AssemblyInfoInputs.cache
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.AssemblyInfo.cs
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.csproj.CoreCompileInputs.cache
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.dll
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/refint/SimpleOpenAi.dll
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/SimpleOpenAi.pdb
+/media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/obj/Release/net7.0/ref/SimpleOpenAi.dll
