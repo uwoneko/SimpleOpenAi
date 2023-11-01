@@ -5,7 +5,7 @@
   },
   "projects": {
     "/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/SimpleOpenAi.csproj": {
-      "version": "1.0.0",
+      "version": "0.1.0",
       "restore": {
         "projectUniqueName": "/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/SimpleOpenAi.csproj",
         "projectName": "SimpleOpenAi",
@@ -40,7 +40,7 @@
           "dependencies": {
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.2, )"
+              "version": "[13.0.3, )"
             }
           },
           "imports": [

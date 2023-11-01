@@ -11,7 +11,7 @@ public class OpenAiClient
 
     public OpenAiClient(string? apiBase = null, string? apiKey = null)
     {
-        Base = apiBase ?? (Environment.GetEnvironmentVariable("OPENAI_API_ENDPOINT") ?? "https://api.openai.com/v1")
+        Base = apiBase ?? (Environment.GetEnvironmentVariable("OPENAI_API_BASE") ?? "https://api.openai.com/v1")
             .TrimEnd('/');
         Key = apiKey ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY")!;
         Chat = new Chat(this);

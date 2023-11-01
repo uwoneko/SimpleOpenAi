@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = OpenAi
-build_property.ProjectDir = /media/yura/Data/User/RiderProjects/uwu-mew-mew-4/SimpleOpenAi/
+build_property.ProjectDir = /home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/
