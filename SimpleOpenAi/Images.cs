@@ -24,7 +24,7 @@ public class Images
     /// <param name="user">A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A task with value of <see cref="Result" /></returns>
-    public async Task<Result> CreateImage(string prompt, int n = 1,
+    public async Task<Result> CreateAsync(string prompt, int n = 1,
         string size = "1024x1024", string responseFormat = "url",
         string? user = null, CancellationToken cancellationToken = default)
     {
