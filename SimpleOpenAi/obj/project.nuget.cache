@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "LsOAmoDxCNqop+k9qv+QBxyICL7zNy28eJDWEXaRhu/MasW4bERXNLYUMkyrAawx/vXwpmt9zjTSpWH3h8+3Xg==",
+  "dgSpecHash": "+5mYWrPchFtkcHH+5ole2HQqYom7pH3klGlmq25/t+1EGx+SPpwrfgGkyWw7tNdn0ygs7JEQ1ZMAh74OWS0zgg==",
   "success": true,
   "projectFilePath": "/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/SimpleOpenAi.csproj",
   "expectedPackageFiles": [
-    "/home/yura/.nuget/packages/newtonsoft.json/13.0.2/newtonsoft.json.13.0.2.nupkg.sha512"
+    "/home/yura/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }
