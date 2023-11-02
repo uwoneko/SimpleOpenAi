@@ -58,7 +58,7 @@
     "/home/yura/.nuget/packages/": {}
   },
   "project": {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "restore": {
       "projectUniqueName": "/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/SimpleOpenAi.csproj",
       "projectName": "SimpleOpenAi",

@@ -46,20 +46,20 @@ await foreach (var result in stream)
 Same here, you can get the whole thing at once:
 ```cs
 var result = await OpenAi.Completions.CreateAsync("Say this is a test");
-Console.WriteLine(result.Content);
+Console.WriteLine(result.Text);
 ```
 Or you can stream the response:
 ```cs
 var stream = OpenAi.Completions.CreateStreaming("Say this is a test");
 await foreach (var result in stream)
 {
-    Console.WriteLine(result.Content);
+    Console.WriteLine(result.Text);
 }
 ```
 ### Embeddings
 ```cs
 var result = await OpenAi.Embeddings.CreateAsync("The food was delicious and the waiter...");
-foreach (float num in result.Embedding)
+foreach (float num in result.Embedding!)
 {
     Console.Write($"{num} ");
 }

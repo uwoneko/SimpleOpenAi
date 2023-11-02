@@ -41,7 +41,7 @@ public class Embeddings
         return new Result
         {
             Raw = responseBody,
-            Embedding = responseBody["data"]?[0]?["embedding"]?.Value<float[]>(),
+            Embedding = responseBody["data"]?[0]?["embedding"]?.ToObject<float[]>(),
         };
     }
     
