@@ -1,5 +1,0 @@
-/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/obj/Release/netstandard2.1/SimpleOpenAi.csproj.AssemblyReference.cache
-/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/obj/Release/netstandard2.1/SimpleOpenAi.GeneratedMSBuildEditorConfig.editorconfig
-/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/obj/Release/netstandard2.1/SimpleOpenAi.AssemblyInfoInputs.cache
-/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/obj/Release/netstandard2.1/SimpleOpenAi.AssemblyInfo.cs
-/home/yura/RiderProjects/SimpleOpenAi/SimpleOpenAi/obj/Release/netstandard2.1/SimpleOpenAi.csproj.CoreCompileInputs.cache
