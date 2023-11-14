@@ -7,13 +7,14 @@ namespace SimpleOpenAi
             public string Role { get; set; }
             public string Content { get; set; }
             public string? Name { get; set; }
-            public string? ToolCalls { get; set; }
+            public IEnumerable<ToolCall>? ToolCalls { get; set; }
         }
         
         public struct ToolCall
         {
             public string Id { get; set; }
             public string Type { get; set; }
+            public Function Function { get; set; }
         }
         
         public struct Function
@@ -39,7 +40,7 @@ namespace SimpleOpenAi
         public struct Result
         {
             public string Id { get; init; }
-            public Choice[] Choices { get; init; }
+            public IEnumerable<Choice> Choices { get; init; }
             public int Created { get; init; }
             public string Model { get; init; }
             public string SystemFingerprint { get; init; }
