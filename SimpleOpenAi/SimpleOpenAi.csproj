@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>OpenAi</RootNamespace>
-        <Version>0.1.1</Version>
+        <Version>0.1.2</Version>
         <Title>SimpleOpenAi</Title>
         <Authors>yusp48</Authors>
         <Description>A simple package for OpenAi API</Description>
@@ -14,6 +14,9 @@
         <PackageProjectUrl>https://github.com/YuraSuper2048/SimpleOpenAi</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+        <EmbedAllSources>true</EmbedAllSources>
     </PropertyGroup>
 
     <ItemGroup>
