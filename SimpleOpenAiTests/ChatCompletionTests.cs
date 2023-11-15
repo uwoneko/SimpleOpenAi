@@ -1,4 +1,8 @@
+using JsonAssertions;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using SimpleOpenAi.Endpoints;
 using SimpleOpenAi.Interfaces;
 
@@ -98,5 +102,146 @@ public class ChatCompletionTests
         });
         
         mockHandler.VerifyAll();
+    }
+    
+    [Test]
+    public async Task CreateAsync_SendsCorrectFields()
+    {
+        // Arrange
+        var mockHandler = new Mock<IOpenAiApiRequestHandler>();
+        var messages = new List<ChatCompletion.Message>
+        {
+            new("user", "Let's rock this test!")
+        };
+
+        var expectedJson = JObject.FromObject(new
+        {
+            model = "gpt-3.5-turbo",
+            messages,
+            max_tokens = 100,
+            presence_penalty = 0.5,
+            frequency_penalty = 0.5,
+            temperature = 0.7,
+            top_p = 1.0,
+            stop = "stop",
+            user = "me",
+            logit_bias = new Dictionary<int, int>
+            {
+                { 1, 1 }
+            },
+            response_format = new ChatCompletion.ResponseFormat("json"),
+            seed = 42,
+            tools = new ChatCompletion.ToolDeclaration[]
+            {
+                new("function", new ChatCompletion.FunctionDeclaration(
+                    "Get the current weather in a given location",
+                    "get_current_weather",
+                    JSchema.Parse("""
+                                  {
+                                      "type": "object",
+                                      "properties": {
+                                          "location": {
+                                              "type": "string",
+                                              "description": "The city and state, e.g. San Francisco, CA"
+                                          },
+                                          "unit": {
+                                              "type": "string",
+                                              "enum": [
+                                                  "celsius",
+                                                  "fahrenheit"
+                                              ]
+                                          }
+                                      },
+                                      "required": [
+                                          "location"
+                                      ]
+                                  }
+                                  """)))
+            },
+            tool_choice = "auto"
+        });
+        
+        var mockedResponse = """
+                             {
+                                 "id": "chatcmpl-8L70GqlOBAbyjzVqkBC58e1eVKrzy",
+                                 "object": "chat.completion",
+                                 "created": 1700042500,
+                                 "model": "gpt-4-0613",
+                                 "choices": [
+                                     {
+                                         "index": 0,
+                                         "message": {
+                                             "role": "assistant",
+                                             "content": "Hello! How can I assist you today?\n"
+                                         },
+                                         "finish_reason": "stop"
+                                     }
+                                 ],
+                                 "usage": {
+                                     "prompt_tokens": 8,
+                                     "completion_tokens": 9,
+                                     "total_tokens": 17
+                                 }
+                             }
+                             """;
+
+        mockHandler.Setup(m => m.SendStringRequest(
+                HttpMethod.Post,
+                "/chat/completions",
+                It.IsAny<string>(),
+                default))
+            .ReturnsAsync(mockedResponse);
+
+        var chatCompletion = new ChatCompletion(mockHandler.Object);
+
+        // Act
+        await chatCompletion.CreateAsync(messages,
+            maxTokens: 100,
+            presencePenalty: 0.5,
+            frequencyPenalty: 0.5,
+            temperature: 0.7,
+            topP: 1.0,
+            stop: "stop",
+            user: "me",
+            logitBias: new Dictionary<int, int>
+            {
+                { 1, 1 }
+            },
+            responseFormat: new ChatCompletion.ResponseFormat("json"),
+            seed: 42,
+            tools: new ChatCompletion.ToolDeclaration[]
+            {
+                new("function", new ChatCompletion.FunctionDeclaration(
+                    "Get the current weather in a given location",
+                    "get_current_weather",
+                    JSchema.Parse("""
+                                  {
+                                      "type": "object",
+                                      "properties": {
+                                          "location": {
+                                              "type": "string",
+                                              "description": "The city and state, e.g. San Francisco, CA"
+                                          },
+                                          "unit": {
+                                              "type": "string",
+                                              "enum": [
+                                                  "celsius",
+                                                  "fahrenheit"
+                                              ]
+                                          }
+                                      },
+                                      "required": [
+                                          "location"
+                                      ]
+                                  }
+                                  """)))
+            },
+            toolChoice: "auto"
+        );
+
+        // Assert
+        var json = JObject.Parse((string)mockHandler.Invocations[0].Arguments[2]);
+        
+        AssertJson.AreEquals(json, expectedJson);
     }
 }
