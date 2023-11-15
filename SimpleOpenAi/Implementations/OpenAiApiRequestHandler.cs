@@ -1,4 +1,6 @@
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using SimpleOpenAi.Endpoints;
 using SimpleOpenAi.Interfaces;
 
 namespace SimpleOpenAi.Implementations;
@@ -31,7 +33,27 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 
     public IEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
     {
-        yield return "";
-        throw new NotImplementedException();
+        var request = new HttpRequestMessage(httpMethod, $"{ApiBase}/{endpoint}");
+        request.Content = new StringContent(body);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
+        
+        var response = HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
+        response.EnsureSuccessStatusCode();
+
+        var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+        using var reader = new StreamReader(stream);
+        
+        while (reader.ReadLine() is { } line)
+        {
+            if (!line.ToLower().StartsWith("data:")) continue;
+
+            var dataString = line.Substring(5).Trim();
+
+            if (dataString == "[DONE]") break;
+
+            yield return dataString;
+            
+            if(cancellationToken.IsCancellationRequested) break;
+        }
     }
 }
