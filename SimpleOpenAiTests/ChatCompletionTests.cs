@@ -138,7 +138,7 @@ public class ChatCompletionTests
                 new("function", new ChatCompletion.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
-                    JSchema.Parse("""
+                    """
                                   {
                                       "type": "object",
                                       "properties": {
@@ -158,7 +158,7 @@ public class ChatCompletionTests
                                           "location"
                                       ]
                                   }
-                                  """)))
+                                  """))
             },
             tool_choice = "auto"
         });
@@ -192,7 +192,7 @@ public class ChatCompletionTests
                 new("function", new ChatCompletion.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
-                    JSchema.Parse("""
+                    """
                                   {
                                       "type": "object",
                                       "properties": {
@@ -212,7 +212,7 @@ public class ChatCompletionTests
                                           "location"
                                       ]
                                   }
-                                  """)))
+                                  """))
             },
             toolChoice: "auto"
         );
