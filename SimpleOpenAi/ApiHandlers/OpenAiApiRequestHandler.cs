@@ -1,10 +1,8 @@
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
-using Newtonsoft.Json.Linq;
-using SimpleOpenAi.Endpoints;
-using SimpleOpenAi.Interfaces;
 
-namespace SimpleOpenAi.Implementations;
+namespace SimpleOpenAi.ApiHandlers;
 
 public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 {
@@ -32,23 +30,24 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
     }
 
 
-    public IEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
         request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
         
-        var response = HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();
+        var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+        var stream = await response.Content.ReadAsStreamAsync();
         using var reader = new StreamReader(stream);
         
-        while (reader.ReadLine() is { } line)
+        while (await reader.ReadLineAsync() is { } line)
         {
             if (!line.ToLower().StartsWith("data:")) continue;
 
-            var dataString = line.Substring(5).Trim();
+            var dataString = line[5..].Trim();
 
             if (dataString == "[DONE]") break;
 

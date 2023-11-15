@@ -1,4 +1,4 @@
-namespace SimpleOpenAi.Interfaces;
+namespace SimpleOpenAi.ApiHandlers;
 
 public interface IOpenAiKeyProvider
 {
