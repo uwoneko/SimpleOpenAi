@@ -11,6 +11,30 @@ namespace SimpleOpenAiTests;
 [TestFixture]
 public class ChatCompletionTests
 {
+    private const string DummyResponse = """
+                                         {
+                                             "id": "chatcmpl-8L70GqlOBAbyjzVqkBC58e1eVKrzy",
+                                             "object": "chat.completion",
+                                             "created": 1700042500,
+                                             "model": "gpt-4-0613",
+                                             "choices": [
+                                                 {
+                                                     "index": 0,
+                                                     "message": {
+                                                         "role": "assistant",
+                                                         "content": "Hello! How can I assist you today?\n"
+                                                     },
+                                                     "finish_reason": "stop"
+                                                 }
+                                             ],
+                                             "usage": {
+                                                 "prompt_tokens": 8,
+                                                 "completion_tokens": 9,
+                                                 "total_tokens": 17
+                                             }
+                                         }
+                                         """;
+    
     [Test]
     public async Task CreateAsync_ParsesResultCorrectly()
     {
@@ -20,30 +44,6 @@ public class ChatCompletionTests
         {
             new("user", "hi")
         };
-        
-        var mockedResponse = """
-           {
-               "id": "chatcmpl-8L70GqlOBAbyjzVqkBC58e1eVKrzy",
-               "object": "chat.completion",
-               "created": 1700042500,
-               "model": "gpt-4-0613",
-               "choices": [
-                   {
-                       "index": 0,
-                       "message": {
-                           "role": "assistant",
-                           "content": "Hello! How can I assist you today?\n"
-                       },
-                       "finish_reason": "stop"
-                   }
-               ],
-               "usage": {
-                   "prompt_tokens": 8,
-                   "completion_tokens": 9,
-                   "total_tokens": 17
-               }
-           }
-           """;
         
         var expectedResult = new ChatCompletion.Result
         {
@@ -77,7 +77,7 @@ public class ChatCompletionTests
                 "/chat/completions",
                 It.IsAny<string>(),
                 default))
-            .ReturnsAsync(mockedResponse);
+            .ReturnsAsync(DummyResponse);
 
         var chatCompletion = new ChatCompletion(mockHandler.Object);
 
@@ -161,38 +161,14 @@ public class ChatCompletionTests
             },
             tool_choice = "auto"
         });
-        
-        var mockedResponse = """
-                             {
-                                 "id": "chatcmpl-8L70GqlOBAbyjzVqkBC58e1eVKrzy",
-                                 "object": "chat.completion",
-                                 "created": 1700042500,
-                                 "model": "gpt-4-0613",
-                                 "choices": [
-                                     {
-                                         "index": 0,
-                                         "message": {
-                                             "role": "assistant",
-                                             "content": "Hello! How can I assist you today?\n"
-                                         },
-                                         "finish_reason": "stop"
-                                     }
-                                 ],
-                                 "usage": {
-                                     "prompt_tokens": 8,
-                                     "completion_tokens": 9,
-                                     "total_tokens": 17
-                                 }
-                             }
-                             """;
 
         mockHandler.Setup(m => m.SendStringRequest(
                 HttpMethod.Post,
                 "/chat/completions",
                 It.IsAny<string>(),
                 default))
-            .ReturnsAsync(mockedResponse);
-
+            .ReturnsAsync(DummyResponse);
+        
         var chatCompletion = new ChatCompletion(mockHandler.Object);
 
         // Act
@@ -239,9 +215,12 @@ public class ChatCompletionTests
             },
             toolChoice: "auto"
         );
+        
+        mockHandler.VerifyAll();
 
         // Assert
         var json = JObject.Parse((string)mockHandler.Invocations[0].Arguments[2]);
+        Console.WriteLine(json);
         
         AssertJson.AreEquals(json, expectedJson);
     }
