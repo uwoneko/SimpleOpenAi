@@ -1,7 +1,6 @@
-namespace SimpleOpenAi
+namespace SimpleOpenAi.Interfaces;
+
+public interface IOpenAiKeyProvider
 {
-    public interface IOpenAiKeyProvider
-    {
-        string Key { get; }
-    }
+    string Key { get; }
 }
