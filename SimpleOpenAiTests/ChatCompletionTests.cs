@@ -1,6 +1,8 @@
 using JsonAssertions;
 using Moq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using SimpleOpenAi.ApiHandlers;
 using SimpleOpenAi.Endpoints;
 
@@ -135,7 +137,7 @@ public class ChatCompletionTests
                 new("function", new ChatCompletion.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
-                    """
+                    JSchema.Parse("""
                                   {
                                       "type": "object",
                                       "properties": {
@@ -155,7 +157,7 @@ public class ChatCompletionTests
                                           "location"
                                       ]
                                   }
-                                  """))
+                                  """)))
             },
             tool_choice = "auto"
         });
@@ -189,27 +191,27 @@ public class ChatCompletionTests
                 new("function", new ChatCompletion.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
-                    """
-                                  {
-                                      "type": "object",
-                                      "properties": {
-                                          "location": {
-                                              "type": "string",
-                                              "description": "The city and state, e.g. San Francisco, CA"
-                                          },
-                                          "unit": {
-                                              "type": "string",
-                                              "enum": [
-                                                  "celsius",
-                                                  "fahrenheit"
-                                              ]
-                                          }
-                                      },
-                                      "required": [
-                                          "location"
-                                      ]
-                                  }
-                                  """))
+                    JSchema.Parse("""
+                                 {
+                                     "type": "object",
+                                     "properties": {
+                                         "location": {
+                                             "type": "string",
+                                             "description": "The city and state, e.g. San Francisco, CA"
+                                         },
+                                         "unit": {
+                                             "type": "string",
+                                             "enum": [
+                                                 "celsius",
+                                                 "fahrenheit"
+                                             ]
+                                         }
+                                     },
+                                     "required": [
+                                         "location"
+                                     ]
+                                 }
+                                 """)))
             },
             toolChoice: "auto"
         );

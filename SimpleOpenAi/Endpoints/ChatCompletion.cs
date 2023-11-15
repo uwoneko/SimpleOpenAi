@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 using SimpleOpenAi.ApiHandlers;
 
 namespace SimpleOpenAi.Endpoints;
@@ -22,7 +23,7 @@ public class ChatCompletion
     (
         [property: JsonProperty("description")] string Description,
         [property: JsonProperty("name")] string Name,
-        [property: JsonProperty("parameters")] string Parameters
+        [property: JsonProperty("parameters")] JSchema Parameters
     );
     
     public record struct ToolDeclaration
@@ -33,14 +34,14 @@ public class ChatCompletion
     
     public record struct ToolCall
     (
-        [property: JsonProperty("id")] string Id,
-        [property: JsonProperty("type")] string Type,
+        [property: JsonProperty("id")] string? Id,
+        [property: JsonProperty("type")] string? Type,
         [property: JsonProperty("function")] FunctionCall Function
     );
 
     public record struct FunctionCall
     (
-        [property: JsonProperty("name")] string Name,
+        [property: JsonProperty("name")] string? Name,
         [property: JsonProperty("arguments")] string Arguments
     );
 
