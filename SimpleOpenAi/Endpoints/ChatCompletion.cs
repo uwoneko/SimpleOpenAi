@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SimpleOpenAi.Interfaces;
 
 namespace SimpleOpenAi.Endpoints;
 
@@ -6,6 +7,14 @@ public class ChatCompletion
 {
     public struct Message
     {
+        public Message(string role, string content, string? name = null, IReadOnlyList<ToolCall>? toolCalls = null)
+        {
+            Role = role;
+            Content = content;
+            Name = name;
+            ToolCalls = toolCalls;
+        }
+
         [JsonProperty("role")]
         public string Role { get; set; }
         [JsonProperty("content")]

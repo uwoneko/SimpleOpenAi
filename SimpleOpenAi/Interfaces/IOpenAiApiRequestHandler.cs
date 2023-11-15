@@ -1,4 +1,4 @@
-namespace SimpleOpenAi;
+namespace SimpleOpenAi.Interfaces;
 
 public interface IOpenAiApiRequestHandler
 {
