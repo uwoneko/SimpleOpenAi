@@ -93,6 +93,7 @@ public class ChatCompletion
             { "temperature", temperature },
             { "top_p", topP },
             { "stop", stop },
+            { "stream", false },
             { "user", user },
             { "logit_bias", logitBias },
             { "response_format", responseFormat },

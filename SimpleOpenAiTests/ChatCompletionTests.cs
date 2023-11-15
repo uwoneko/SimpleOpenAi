@@ -124,6 +124,7 @@ public class ChatCompletionTests
             temperature = 0.7,
             top_p = 1.0,
             stop = "stop",
+            stream = false,
             user = "me",
             logit_bias = new Dictionary<int, int>
             {
