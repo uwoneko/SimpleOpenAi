@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text;
 using Newtonsoft.Json.Linq;
 using SimpleOpenAi.Endpoints;
 using SimpleOpenAi.Interfaces;
@@ -20,8 +21,8 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 
     public async Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
     {
-        var request = new HttpRequestMessage(httpMethod, $"{ApiBase}/{endpoint}");
-        request.Content = new StringContent(body);
+        var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
+        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
 
         var response = await HttpClient.SendAsync(request, cancellationToken);
@@ -33,8 +34,8 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 
     public IEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
     {
-        var request = new HttpRequestMessage(httpMethod, $"{ApiBase}/{endpoint}");
-        request.Content = new StringContent(body);
+        var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
+        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
         
         var response = HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).GetAwaiter().GetResult();

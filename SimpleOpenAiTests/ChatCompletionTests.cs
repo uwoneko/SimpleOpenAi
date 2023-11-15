@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using SimpleOpenAi.Endpoints;
+using SimpleOpenAi.Implementations;
 using SimpleOpenAi.Interfaces;
 
 namespace SimpleOpenAiTests;
