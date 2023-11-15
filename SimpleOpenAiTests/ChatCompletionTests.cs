@@ -12,7 +12,7 @@ namespace SimpleOpenAiTests;
 public class ChatCompletionTests
 {
     [Test]
-    public async Task CreateAsync_ParsesResult()
+    public async Task CreateAsync_ParsesResultCorrectly()
     {
         // Arrange
         var mockHandler = new Mock<IOpenAiApiRequestHandler>();
