@@ -72,7 +72,7 @@ public class ChatCompletionTests
             }
         };
 
-        mockHandler.Setup(m => m.SendStringRequest(
+        mockHandler.Setup(m => m.SendStringRequestAsync(
                 HttpMethod.Post,
                 "/chat/completions",
                 It.IsAny<string>(),
@@ -162,7 +162,7 @@ public class ChatCompletionTests
             tool_choice = "auto"
         });
 
-        mockHandler.Setup(m => m.SendStringRequest(
+        mockHandler.Setup(m => m.SendStringRequestAsync(
                 HttpMethod.Post,
                 "/chat/completions",
                 It.IsAny<string>(),

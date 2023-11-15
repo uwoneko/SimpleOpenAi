@@ -107,7 +107,7 @@ public class ChatCompletion
 
         var requestJson = JsonConvert.SerializeObject(parameters);
     
-        var response = await _openAiApiRequestHandler.SendStringRequest(HttpMethod.Post, "/chat/completions", requestJson);
+        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/chat/completions", requestJson);
         
         var result = JsonConvert.DeserializeObject<Result>(response);
         return result;

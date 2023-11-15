@@ -16,7 +16,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         ApiBase = apiBase;
     }
 
-    public async Task<string> SendStringRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
+    public async Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}/{endpoint}");
         request.Content = new StringContent(body);
@@ -29,8 +29,9 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
     }
 
 
-    public Task<Stream> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
+    public IEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
     {
+        yield return "";
         throw new NotImplementedException();
     }
 }
