@@ -3,17 +3,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using SimpleOpenAi.ApiHandlers;
 
-namespace SimpleOpenAi.Endpoints;
+namespace SimpleOpenAi;
 
 public class ChatCompletion
 {
-    public record struct Message(
-        [property: JsonProperty("role")] string Role,
-        [property: JsonProperty("content")] string? Content,
-        [property: JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)] string? Name = null,
-        [property: JsonProperty("tool_calls", NullValueHandling = NullValueHandling.Ignore)] IReadOnlyList<ToolCall>? ToolCalls = null
-    );
-
     public record struct ResponseFormat
     (
         [property: JsonProperty("type")] string Type
@@ -49,14 +42,14 @@ public class ChatCompletion
     (
         [property: JsonProperty("finish_reason")] string FinishReason,
         [property: JsonProperty("index")] int Index,
-        [property: JsonProperty("message")] Message Message
+        [property: JsonProperty("message")] ChatMessage Message
     );
 
     public record struct StreamChoice
     (
         [property: JsonProperty("finish_reason")] string? FinishReason,
         [property: JsonProperty("index")] int Index,
-        [property: JsonProperty("delta")] Message Delta
+        [property: JsonProperty("delta")] ChatMessage Delta
     );
 
     public record struct Usage
@@ -94,7 +87,7 @@ public class ChatCompletion
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
 
-    public async Task<Result> CreateAsync(IEnumerable<Message> messages, string model = "gpt-3.5-turbo",
+    public async Task<Result> CreateAsync(IEnumerable<ChatMessage> messages, string model = "gpt-3.5-turbo",
         int? maxTokens = null, double? presencePenalty = null, int? n = null,
         double? frequencyPenalty = null, double? temperature = null, double? topP = null, string? stop = null, 
         string? user = null, Dictionary<int, int>? logitBias = null, 
@@ -132,7 +125,7 @@ public class ChatCompletion
         return result;
     }
 
-    public async IAsyncEnumerable<Chunk> CreateStreaming(IEnumerable<Message> messages, string model = "gpt-3.5-turbo",
+    public async IAsyncEnumerable<Chunk> CreateStreaming(IEnumerable<ChatMessage> messages, string model = "gpt-3.5-turbo",
         int? maxTokens = null, double? presencePenalty = null, int? n = null,
         double? frequencyPenalty = null, double? temperature = null, double? topP = null, string? stop = null, 
         string? user = null, Dictionary<int, int>? logitBias = null, 

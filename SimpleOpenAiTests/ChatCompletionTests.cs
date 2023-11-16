@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using SimpleOpenAi.ApiHandlers;
-using SimpleOpenAi.Endpoints;
+using SimpleOpenAi;
 
 namespace SimpleOpenAiTests;
 
@@ -40,7 +40,7 @@ public class ChatCompletionTests
     {
         // Arrange
         var mockHandler = new Mock<IOpenAiApiRequestHandler>();
-        var messages = new List<ChatCompletion.Message>
+        var messages = new List<ChatMessage>
         {
             new("user", "hi")
         };
@@ -56,7 +56,7 @@ public class ChatCompletionTests
                 new ChatCompletion.Choice
                 {
                     Index = 0,
-                    Message = new ChatCompletion.Message
+                    Message = new ChatMessage
                     {
                         Role = "assistant",
                         Content = "Hello! How can I assist you today?\n"
@@ -107,7 +107,7 @@ public class ChatCompletionTests
     {
         // Arrange
         var mockHandler = new Mock<IOpenAiApiRequestHandler>();
-        var messages = new List<ChatCompletion.Message>
+        var messages = new List<ChatMessage>
         {
             new("user", "hi")
         };
@@ -228,7 +228,7 @@ public class ChatCompletionTests
     {
         // Arrange
         var mockHandler = new Mock<IOpenAiApiRequestHandler>();
-        var messages = new List<ChatCompletion.Message>
+        var messages = new List<ChatMessage>
         {
             new("user", "hi")
         };
@@ -249,7 +249,7 @@ public class ChatCompletionTests
                     new()
                     {
                         Index = 0,
-                        Delta = new ChatCompletion.Message("assistant", "Hello")
+                        Delta = new ChatMessage("assistant", "Hello")
                     }
                 },
                 Created = 1700042501,
@@ -264,7 +264,7 @@ public class ChatCompletionTests
                     new()
                     {
                         Index = 0,
-                        Delta = new ChatCompletion.Message("assistant", "!")
+                        Delta = new ChatMessage("assistant", "!")
                     }
                 },
                 Created = 1700042502,
