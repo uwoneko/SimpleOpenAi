@@ -1,3 +1,5 @@
+using SimpleOpenAi.Endpoints;
+
 namespace SimpleOpenAi;
 
 public static class OpenAi

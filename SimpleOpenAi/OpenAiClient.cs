@@ -1,5 +1,6 @@
 using SimpleOpenAi.ApiHandlers;
 using SimpleOpenAi;
+using SimpleOpenAi.Endpoints;
 
 namespace SimpleOpenAi;
 

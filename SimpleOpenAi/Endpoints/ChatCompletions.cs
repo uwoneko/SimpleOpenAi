@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using SimpleOpenAi.ApiHandlers;
 
-namespace SimpleOpenAi;
+namespace SimpleOpenAi.Endpoints;
 
 public class ChatCompletions
 {
