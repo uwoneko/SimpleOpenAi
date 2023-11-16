@@ -5,7 +5,7 @@ using SimpleOpenAi.ApiHandlers;
 
 namespace SimpleOpenAi;
 
-public class ChatCompletion
+public class ChatCompletions
 {
     public record struct ResponseFormat
     (
@@ -82,7 +82,7 @@ public class ChatCompletion
         
     private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
 
-    public ChatCompletion(IOpenAiApiRequestHandler openAiApiRequestHandler)
+    public ChatCompletions(IOpenAiApiRequestHandler openAiApiRequestHandler)
     {
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }

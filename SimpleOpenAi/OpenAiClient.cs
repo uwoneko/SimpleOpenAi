@@ -20,12 +20,12 @@ public class OpenAiClient
         set => _apiRequestHandler.ApiBase = value;
     }
 
-    public ChatCompletion Chat;
+    public ChatCompletions Chat;
 
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
         _apiKeyProvider = new OpenAiApiKeyProvider(apiKey);
         _apiRequestHandler = new OpenAiApiRequestHandler(_apiKeyProvider, apiBase);
-        Chat = new ChatCompletion(_apiRequestHandler);
+        Chat = new ChatCompletions(_apiRequestHandler);
     }
 }

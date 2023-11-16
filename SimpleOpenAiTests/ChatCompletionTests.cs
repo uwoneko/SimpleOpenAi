@@ -45,7 +45,7 @@ public class ChatCompletionTests
             new("user", "hi")
         };
         
-        var expectedResult = new ChatCompletion.Result
+        var expectedResult = new ChatCompletions.Result
         {
             Id = "chatcmpl-8L70GqlOBAbyjzVqkBC58e1eVKrzy",
             Object = "chat.completion",
@@ -53,7 +53,7 @@ public class ChatCompletionTests
             Model = "gpt-4-0613",
             Choices = new []
             {
-                new ChatCompletion.Choice
+                new ChatCompletions.Choice
                 {
                     Index = 0,
                     Message = new ChatMessage
@@ -64,7 +64,7 @@ public class ChatCompletionTests
                     FinishReason = "stop"
                 }
             },
-            Usage = new ChatCompletion.Usage
+            Usage = new ChatCompletions.Usage
             {
                 PromptTokens = 8,
                 CompletionTokens = 9,
@@ -79,7 +79,7 @@ public class ChatCompletionTests
                 default))
             .ReturnsAsync(DummyResponse);
 
-        var chatCompletion = new ChatCompletion(mockHandler.Object);
+        var chatCompletion = new ChatCompletions(mockHandler.Object);
 
         // Act
         var result = await chatCompletion.CreateAsync(messages, model: "gpt-4");
@@ -128,11 +128,11 @@ public class ChatCompletionTests
             {
                 { 1, 1 }
             },
-            response_format = new ChatCompletion.ResponseFormat("json"),
+            response_format = new ChatCompletions.ResponseFormat("json"),
             seed = 42,
-            tools = new ChatCompletion.ToolDeclaration[]
+            tools = new ChatCompletions.ToolDeclaration[]
             {
-                new("function", new ChatCompletion.FunctionDeclaration(
+                new("function", new ChatCompletions.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
                     JSchema.Parse("""
@@ -167,7 +167,7 @@ public class ChatCompletionTests
                 default))
             .ReturnsAsync(DummyResponse);
         
-        var chatCompletion = new ChatCompletion(mockHandler.Object);
+        var chatCompletion = new ChatCompletions(mockHandler.Object);
 
         // Act
         await chatCompletion.CreateAsync(messages,
@@ -182,11 +182,11 @@ public class ChatCompletionTests
             {
                 { 1, 1 }
             },
-            responseFormat: new ChatCompletion.ResponseFormat("json"),
+            responseFormat: new ChatCompletions.ResponseFormat("json"),
             seed: 42,
-            tools: new ChatCompletion.ToolDeclaration[]
+            tools: new ChatCompletions.ToolDeclaration[]
             {
-                new("function", new ChatCompletion.FunctionDeclaration(
+                new("function", new ChatCompletions.FunctionDeclaration(
                     "Get the current weather in a given location",
                     "get_current_weather",
                     JSchema.Parse("""
@@ -239,12 +239,12 @@ public class ChatCompletionTests
             @"{""id"": ""chunk2"", ""choices"": [{""index"": 0, ""delta"": {""role"": ""assistant"", ""content"": ""!""}}], ""created"": 1700042502, ""model"": ""gpt-4-0613"", ""object"": ""stream.chunk""}",
         };
 
-        var expectedChunks = new List<ChatCompletion.Chunk>
+        var expectedChunks = new List<ChatCompletions.Chunk>
         {
             new()
             {
                 Id = "chunk1",
-                Choices = new List<ChatCompletion.StreamChoice>
+                Choices = new List<ChatCompletions.StreamChoice>
                 {
                     new()
                     {
@@ -259,7 +259,7 @@ public class ChatCompletionTests
             new()
             {
                 Id = "chunk2",
-                Choices = new List<ChatCompletion.StreamChoice>
+                Choices = new List<ChatCompletions.StreamChoice>
                 {
                     new()
                     {
@@ -288,7 +288,7 @@ public class ChatCompletionTests
                 default))
             .Returns(ResponseMock);
 
-        var chatCompletion = new ChatCompletion(mockHandler.Object);
+        var chatCompletion = new ChatCompletions(mockHandler.Object);
 
         // Act
         var index = 0;

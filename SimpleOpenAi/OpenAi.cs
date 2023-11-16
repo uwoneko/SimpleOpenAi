@@ -16,5 +16,5 @@ public static class OpenAi
         set => ClientInstance.ApiBase = value;
     }
     
-    public static ChatCompletion Chat => ClientInstance.Chat;
+    public static ChatCompletions Chat => ClientInstance.Chat;
 }
