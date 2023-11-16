@@ -11,10 +11,10 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 
     private static readonly HttpClient HttpClient = new();
 
-    public OpenAiApiRequestHandler(IOpenAiKeyProvider openAiKeyProvider, string apiBase = "https://api.openai.com/v1")
+    public OpenAiApiRequestHandler(IOpenAiKeyProvider openAiKeyProvider, string? apiBase = null)
     {
         _openAiKeyProvider = openAiKeyProvider;
-        ApiBase = apiBase;
+        ApiBase = apiBase ?? "https://api.openai.com/v1";
     }
 
     public async Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
