@@ -6,7 +6,7 @@ namespace SimpleOpenAi.ApiHandlers;
 
 public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 {
-    private string ApiBase { get; set; }
+    public string ApiBase { get; set; }
     private readonly IOpenAiKeyProvider _openAiKeyProvider;
 
     private static readonly HttpClient HttpClient = new();

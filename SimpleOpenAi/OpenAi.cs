@@ -1,19 +1,20 @@
-using SimpleOpenAi.ApiHandlers;
-using SimpleOpenAi;
-
 namespace SimpleOpenAi;
 
-public class OpenAi
+public static class OpenAi
 {
-    private OpenAiApiRequestHandler _apiRequestHandler;
-    private OpenAiApiKeyProvider _apiKeyProvider;
-
-    public ChatCompletion Chat;
-
-    public OpenAi(string? apiKey = null, string? apiBase = null)
+    public static OpenAiClient ClientInstance = new();
+    
+    public static string ApiKey
     {
-        _apiKeyProvider = new OpenAiApiKeyProvider(apiKey);
-        _apiRequestHandler = new OpenAiApiRequestHandler(_apiKeyProvider, apiBase);
-        Chat = new ChatCompletion(_apiRequestHandler);
+        get => ClientInstance.ApiKey;
+        set => ClientInstance.ApiKey = value;
     }
+    
+    public static string ApiBase
+    {
+        get => ClientInstance.ApiBase;
+        set => ClientInstance.ApiBase = value;
+    }
+    
+    public static ChatCompletion Chat => ClientInstance.Chat;
 }
