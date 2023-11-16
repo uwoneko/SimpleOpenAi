@@ -85,21 +85,19 @@ public class ChatCompletionTests
         var result = await chatCompletion.CreateAsync(messages, model: "gpt-4");
 
         // Assert
-        Assert.Multiple(() =>
+        
+        Assert.That(result.Id, Is.EqualTo(expectedResult.Id));
+        Assert.That(result.Object, Is.EqualTo(expectedResult.Object));
+        Assert.That(result.Created, Is.EqualTo(expectedResult.Created));
+        Assert.That(result.Model, Is.EqualTo(expectedResult.Model));
+        Assert.That(result.Choices, Is.Not.Null);
+        for (var i = 0; i < result.Choices.Count; i++)
         {
-            Assert.That(result.Id, Is.EqualTo(expectedResult.Id));
-            Assert.That(result.Object, Is.EqualTo(expectedResult.Object));
-            Assert.That(result.Created, Is.EqualTo(expectedResult.Created));
-            Assert.That(result.Model, Is.EqualTo(expectedResult.Model));
-            Assert.That(result.Choices, Is.Not.Null);
-            for (var i = 0; i < result.Choices.Count; i++)
-            {
-                Assert.That(result.Choices[i].Index, Is.EqualTo(expectedResult.Choices[i].Index));
-                Assert.That(result.Choices[i].Message, Is.EqualTo(expectedResult.Choices[i].Message));
-                Assert.That(result.Choices[i].FinishReason, Is.EqualTo(expectedResult.Choices[i].FinishReason));
-            }
-            Assert.That(result.Usage, Is.EqualTo(expectedResult.Usage));
-        });
+            Assert.That(result.Choices[i].Index, Is.EqualTo(expectedResult.Choices[i].Index));
+            Assert.That(result.Choices[i].Message, Is.EqualTo(expectedResult.Choices[i].Message));
+            Assert.That(result.Choices[i].FinishReason, Is.EqualTo(expectedResult.Choices[i].FinishReason));
+        }
+        Assert.That(result.Usage, Is.EqualTo(expectedResult.Usage));
         
         mockHandler.VerifyAll();
     }
@@ -111,7 +109,7 @@ public class ChatCompletionTests
         var mockHandler = new Mock<IOpenAiApiRequestHandler>();
         var messages = new List<ChatCompletion.Message>
         {
-            new("user", "Let's rock this test!")
+            new("user", "hi")
         };
 
         var expectedJson = JObject.FromObject(new
@@ -224,4 +222,99 @@ public class ChatCompletionTests
         
         AssertJson.AreEquals(json, expectedJson);
     }
+    
+    [Test]
+    public async Task CreateStreaming_ParsesStreamCorrectly()
+    {
+        // Arrange
+        var mockHandler = new Mock<IOpenAiApiRequestHandler>();
+        var messages = new List<ChatCompletion.Message>
+        {
+            new("user", "hi")
+        };
+
+        var dummyStreamResponses = new List<string>
+        {
+            @"{""id"": ""chunk1"", ""choices"": [{""index"": 0, ""delta"": {""role"": ""assistant"", ""content"": ""Hello""}}], ""created"": 1700042501, ""model"": ""gpt-4-0613"", ""object"": ""stream.chunk""}",
+            @"{""id"": ""chunk2"", ""choices"": [{""index"": 0, ""delta"": {""role"": ""assistant"", ""content"": ""!""}}], ""created"": 1700042502, ""model"": ""gpt-4-0613"", ""object"": ""stream.chunk""}",
+        };
+
+        var expectedChunks = new List<ChatCompletion.Chunk>
+        {
+            new()
+            {
+                Id = "chunk1",
+                Choices = new List<ChatCompletion.StreamChoice>
+                {
+                    new()
+                    {
+                        Index = 0,
+                        Delta = new ChatCompletion.Message("assistant", "Hello")
+                    }
+                },
+                Created = 1700042501,
+                Model = "gpt-4-0613",
+                Object = "stream.chunk"
+            },
+            new()
+            {
+                Id = "chunk2",
+                Choices = new List<ChatCompletion.StreamChoice>
+                {
+                    new()
+                    {
+                        Index = 0,
+                        Delta = new ChatCompletion.Message("assistant", "!")
+                    }
+                },
+                Created = 1700042502,
+                Model = "gpt-4-0613",
+                Object = "stream.chunk"
+            }
+        };
+
+        async IAsyncEnumerable<string> ResponseMock()
+        {
+            foreach (var response in dummyStreamResponses)
+            {
+                yield return response;
+            }
+        }
+
+        mockHandler.Setup(m => m.SendStreamRequest(
+                HttpMethod.Post,
+                "/chat/completions",
+                It.IsAny<string>(),
+                default))
+            .Returns(ResponseMock);
+
+        var chatCompletion = new ChatCompletion(mockHandler.Object);
+
+        // Act
+        var index = 0;
+        await foreach (var chunk in chatCompletion.CreateStreaming(messages, cancellationToken: default))
+        {
+            // Assert
+            var expectedChunk = expectedChunks[index];
+            Assert.That(chunk.Id, Is.EqualTo(expectedChunk.Id));
+            Assert.That(chunk.Choices, Is.Not.Null);
+            Assert.That(chunk.Choices.Count, Is.EqualTo(expectedChunk.Choices.Count));
+            for (var i = 0; i < chunk.Choices.Count; i++)
+            {
+                Assert.That(chunk.Choices[i].Index, Is.EqualTo(expectedChunk.Choices[i].Index));
+                Assert.That(chunk.Choices[i].Delta, Is.EqualTo(expectedChunk.Choices[i].Delta));
+            }
+            Assert.That(chunk.Created, Is.EqualTo(expectedChunk.Created));
+            Assert.That(chunk.Model, Is.EqualTo(expectedChunk.Model));
+            Assert.That(chunk.Object, Is.EqualTo(expectedChunk.Object));
+
+            index++;
+        }
+
+        // Ensure that we have processed all expected chunks
+        Assert.That(index, Is.EqualTo(expectedChunks.Count));
+
+        mockHandler.VerifyAll();
+}
+
 }
