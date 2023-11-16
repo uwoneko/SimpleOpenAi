@@ -133,8 +133,8 @@ public class ChatCompletionTests
             tools = new ChatCompletions.ToolDeclaration[]
             {
                 new("function", new ChatCompletions.FunctionDeclaration(
-                    "Get the current weather in a given location",
                     "get_current_weather",
+                    "Get the current weather in a given location",
                     JSchema.Parse("""
                                   {
                                       "type": "object",
@@ -187,8 +187,8 @@ public class ChatCompletionTests
             tools: new ChatCompletions.ToolDeclaration[]
             {
                 new("function", new ChatCompletions.FunctionDeclaration(
-                    "Get the current weather in a given location",
                     "get_current_weather",
+                    "Get the current weather in a given location",
                     JSchema.Parse("""
                                  {
                                      "type": "object",

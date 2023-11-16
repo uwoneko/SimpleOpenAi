@@ -14,8 +14,8 @@ public class ChatCompletions
     
     public record struct FunctionDeclaration
     (
-        [property: JsonProperty("description")] string Description,
         [property: JsonProperty("name")] string Name,
+        [property: JsonProperty("description")] string Description,
         [property: JsonProperty("parameters")] JSchema Parameters
     );
     
