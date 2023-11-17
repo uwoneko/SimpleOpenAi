@@ -87,12 +87,23 @@ public class ChatCompletions
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
 
-    public async Task<Result> CreateAsync(IEnumerable<ChatMessage> messages, string model = "gpt-3.5-turbo",
-        int? maxTokens = null, double? presencePenalty = null, int? n = null,
-        double? frequencyPenalty = null, double? temperature = null, double? topP = null, string? stop = null, 
-        string? user = null, Dictionary<int, int>? logitBias = null, 
-        ResponseFormat? responseFormat = null, int? seed = null, IEnumerable<ToolDeclaration>? tools = null, 
-        string? toolChoice = null, CancellationToken cancellationToken = default)
+    public async Task<Result> CreateAsync(
+        IEnumerable<ChatMessage> messages, 
+        string model = "gpt-3.5-turbo",
+        int? maxTokens = null, 
+        int? n = null,
+        double? presencePenalty = null, 
+        double? frequencyPenalty = null, 
+        double? temperature = null, 
+        double? topP = null, 
+        string? stop = null, 
+        string? user = null, 
+        int? seed = null, 
+        Dictionary<int, int>? logitBias = null, 
+        ResponseFormat? responseFormat = null, 
+        IEnumerable<ToolDeclaration>? tools = null, 
+        string? toolChoice = null, 
+        CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object?>
         {
@@ -125,12 +136,23 @@ public class ChatCompletions
         return result;
     }
 
-    public async IAsyncEnumerable<Chunk> CreateStreaming(IEnumerable<ChatMessage> messages, string model = "gpt-3.5-turbo",
-        int? maxTokens = null, double? presencePenalty = null, int? n = null,
-        double? frequencyPenalty = null, double? temperature = null, double? topP = null, string? stop = null, 
-        string? user = null, Dictionary<int, int>? logitBias = null, 
-        ResponseFormat? responseFormat = null, int? seed = null, IEnumerable<ToolDeclaration>? tools = null, 
-        string? toolChoice = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<Chunk> CreateStreaming(
+        IEnumerable<ChatMessage> messages, 
+        string model = "gpt-3.5-turbo",
+        int? maxTokens = null, 
+        int? n = null,
+        double? presencePenalty = null, 
+        double? frequencyPenalty = null, 
+        double? temperature = null, 
+        double? topP = null, 
+        string? stop = null, 
+        string? user = null, 
+        int? seed = null, 
+        Dictionary<int, int>? logitBias = null, 
+        ResponseFormat? responseFormat = null, 
+        IEnumerable<ToolDeclaration>? tools = null, 
+        string? toolChoice = null, 
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object?>
         {
