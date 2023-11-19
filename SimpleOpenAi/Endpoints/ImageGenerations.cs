@@ -1,8 +1,5 @@
 using Newtonsoft.Json;
 using SimpleOpenAi.ApiHandlers;
-#if NET6_0_OR_GREATER
-using SixLabors.ImageSharp;
-#endif
 
 namespace SimpleOpenAi.Endpoints;
 
@@ -21,10 +18,18 @@ public class ImageGenerations
     )
     {
         /// <summary>
-        /// Returns <see cref="ImageObject.Url"/> of the first image
+        /// Returns url of the first image
         /// </summary>
         [JsonIgnore]
         public string Url => Data[0].Url;
+
+        /// <summary>
+        /// Returns bytes of image at specified index
+        /// </summary>
+        public string GetUrl(int index)
+        {
+            return Data[0].Url;
+        }
     }
     
     public record struct Base64ImageObject
@@ -40,34 +45,18 @@ public class ImageGenerations
     )
     {
         /// <summary>
-        /// Returns bytes of the first image, if "responseFormat" was "b64_json"
+        /// Returns bytes of the first image
         /// </summary>
         [JsonIgnore]
-        public byte[] ImageBytes => GetImageBytes(0);
+        public byte[] Bytes => GetBytes(0);
 
         /// <summary>
-        /// Returns bytes of image at specified index, if "responseFormat" was "b64_json"
+        /// Returns bytes of image at specified index
         /// </summary>
-        public byte[] GetImageBytes(int index)
+        public byte[] GetBytes(int index)
         {
             return Convert.FromBase64String(Data[index].Base64Json);
         }
-
-#if NET6_0_OR_GREATER
-        /// <summary>
-        /// Returns <see cref="Image"/> of the first image, if "responseFormat" was "b64_json"
-        /// </summary>
-        [JsonIgnore]
-        public Image Image => GetImage(0);
-        
-        /// <summary>
-        /// Returns <see cref="Image"/> of image at specified index, if "responseFormat" was "b64_json"
-        /// </summary>
-        public Image GetImage(int index)
-        {
-            return Image.Load(GetImageBytes(index));
-        }
-#endif
     }
     
     private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
