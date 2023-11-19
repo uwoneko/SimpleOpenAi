@@ -1,17 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net5;netcoreapp3.1</TargetFrameworks>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFrameworks>net6;net5;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11.0</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="JsonAssertions" Version="1.0.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-      <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
-      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+        <PackageReference Include="JsonAssertions" Version="1.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
+        <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net6' ">
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
     </ItemGroup>
 
 </Project>
