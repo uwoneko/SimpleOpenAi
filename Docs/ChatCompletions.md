@@ -1,13 +1,12 @@
 # Chat completions
 
 Provides an implementation of OpenAI API's chat completions.
-https://platform.openai.com/docs/api-reference/chat/create
+https://platform.openai.com/docs/api-reference/chat
 
-Changes:
-- "stream" parameter is split into `CreateStreaming` and `CreateAsync`
-- All properties are in `PascalCase`
-- All arguments are in `camelCase`
+Differences from OpenAI doc:
+- `stream` parameter is decided by either `CreateStreaming` or `CreateAsync`
 - `tool_choice` can only be a string
+- Shortcuts for results, `result.Choices[0].Message.Content` can be replaced with `result.Content` or `(string)result`
 
 ## Examples:
 Streaming:
