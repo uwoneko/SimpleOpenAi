@@ -22,7 +22,7 @@ var stream = OpenAi.Chat.CreateStreaming(messages, model: "gpt-4-1106-preview");
 
 await foreach (var chunk in stream)
 {
-    Console.Write(chunk.Choices[0].Delta.Content);
+    Console.Write(chunk.Content); // or chunk.Choices[0].Delta.Content
 }
 ```
 Non-streaming:
@@ -36,7 +36,7 @@ var messages = new ChatMessage[]
 
 var result = await OpenAi.Chat.CreateAsync(messages, model: "gpt-4-1106-preview");
 
-Console.Write(result.Choices[0].Message.Content);
+Console.Write(result.Content); // or result.Choices[0].Message.Content
 ```
 Function calls (non-streaming, but CreateStreaming supports it too):
 ```csharp

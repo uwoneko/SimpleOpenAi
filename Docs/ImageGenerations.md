@@ -10,4 +10,19 @@ Differences from OpenAI doc:
   - `base64Result.Data[0].Bytes` can be replaced with `base64Result.Bytes` or `urlResult.GetBytes(0)`
 
 ## Examples:
-TODO
+Bytes
+```csharp
+using SimpleOpenAi;
+
+var result = await OpenAi.Images.CreateBytesAsync("A picture of a cat jumping.", model:"dall-e-3");
+
+File.WriteAllBytes("image.png", result.Bytes);
+```
+Url
+```csharp
+using SimpleOpenAi;
+
+var result = await OpenAi.Images.CreateUrlAsync("A picture of a cat jumping.", model:"dall-e-3");
+
+Console.WriteLine(result.Url);
+```
