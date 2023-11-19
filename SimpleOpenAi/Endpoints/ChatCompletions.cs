@@ -68,7 +68,18 @@ public class ChatCompletions
         [property: JsonProperty("system_fingerprint")] string SystemFingerprint,
         [property: JsonProperty("object")] string Object,
         [property: JsonProperty("usage")] Usage Usage
-    );
+    )
+    {
+        /// <summary>
+        /// Points to the first message's content
+        /// </summary>
+        public string Content => Choices[0].Message.Content!;
+
+        public static explicit operator string(Result result)
+        {
+            return result.Content;
+        }
+    }
 
     public record struct Chunk
     (
@@ -78,7 +89,18 @@ public class ChatCompletions
         [property: JsonProperty("model")] string Model,
         [property: JsonProperty("system_fingerprint")] string SystemFingerprint,
         [property: JsonProperty("object")] string Object
-    );
+    )
+    {
+        /// <summary>
+        /// Points to the first message's content
+        /// </summary>
+        public string Content => Choices[0].Delta.Content!;
+
+        public static explicit operator string(Chunk result)
+        {
+            return result.Content;
+        }
+    }
         
     private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
 
