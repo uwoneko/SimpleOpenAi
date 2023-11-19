@@ -23,10 +23,13 @@ public class OpenAiClient
 
     public ChatCompletions Chat;
 
+    public ImageGenerations Images;
+
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
         _apiKeyProvider = new OpenAiApiKeyProvider(apiKey);
         _apiRequestHandler = new OpenAiApiRequestHandler(_apiKeyProvider, apiBase);
         Chat = new ChatCompletions(_apiRequestHandler);
+        Images = new ImageGenerations(_apiRequestHandler);
     }
 }

@@ -19,4 +19,6 @@ public static class OpenAi
     }
     
     public static ChatCompletions Chat => ClientInstance.Chat;
+    
+    public static ImageGenerations Images => ClientInstance.Images;
 }
