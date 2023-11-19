@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -9,12 +10,42 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
     public string ApiBase { get; set; }
     private readonly IOpenAiKeyProvider _openAiKeyProvider;
 
-    private static readonly HttpClient HttpClient = new();
+    private static readonly HttpClient HttpClient;
 
     public OpenAiApiRequestHandler(IOpenAiKeyProvider openAiKeyProvider, string? apiBase = null)
     {
         _openAiKeyProvider = openAiKeyProvider;
         ApiBase = apiBase ?? "https://api.openai.com/v1";
+    }
+
+    static OpenAiApiRequestHandler()
+    {
+        var httpClientHandler = new HttpClientHandler();
+        var proxyUriString = Environment.GetEnvironmentVariable("HTTP_PROXY");
+
+        if (!string.IsNullOrWhiteSpace(proxyUriString))
+        {
+            var proxyUri = new Uri(proxyUriString);
+            httpClientHandler.UseProxy = true;
+
+            if (!string.IsNullOrWhiteSpace(proxyUri.UserInfo))
+            {
+                var credentials = proxyUri.UserInfo.Split(':');
+                if (credentials.Length == 2)
+                {
+                    httpClientHandler.Proxy = new WebProxy(proxyUri.Authority)
+                    {
+                        Credentials = new NetworkCredential(credentials[0], credentials[1])
+                    };
+                }
+            }
+            else
+            {
+                httpClientHandler.Proxy = new WebProxy(proxyUri);
+            }
+        }
+
+        HttpClient = new HttpClient(httpClientHandler, disposeHandler: true);
     }
 
     public async Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
