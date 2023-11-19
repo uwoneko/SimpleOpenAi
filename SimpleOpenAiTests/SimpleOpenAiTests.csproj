@@ -18,7 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SimpleOpenAi.csproj" />
       <ProjectReference Include="..\SimpleOpenAi\SimpleOpenAi.csproj" />
     </ItemGroup>
 
