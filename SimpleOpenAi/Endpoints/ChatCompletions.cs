@@ -53,19 +53,13 @@ public class ChatCompletions
             { "tool_choice", toolChoice }
         };
 
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
-
-        var requestJson = JsonConvert.SerializeObject(parameters);
-
-        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/chat/completions",
-            requestJson, cancellationToken);
-
-        var result = JsonConvert.DeserializeObject<Result>(response);
+        var result = await _openAiApiRequestHandler.SendRequestAsync<Result>(
+            HttpMethod.Post, "/chat/completions", parameters, cancellationToken);
+        
         return result;
     }
 
-    public async IAsyncEnumerable<Chunk> CreateStreaming(
+    public IAsyncEnumerable<Chunk> CreateStreaming(
         IEnumerable<ChatMessage> messages,
         string model = "gpt-3.5-turbo",
         int? maxTokens = null,
@@ -81,7 +75,7 @@ public class ChatCompletions
         ResponseFormat? responseFormat = null,
         IEnumerable<ToolDeclaration>? tools = null,
         string? toolChoice = null,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         var parameters = new Dictionary<string, object?>
         {
@@ -103,20 +97,10 @@ public class ChatCompletions
             { "tool_choice", toolChoice }
         };
 
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
+        var stream = _openAiApiRequestHandler.SendRequestStreaming<Chunk>(
+            HttpMethod.Post, "/chat/completions", parameters, cancellationToken);
 
-        var requestJson = JsonConvert.SerializeObject(parameters);
-
-        var stream =
-            _openAiApiRequestHandler.SendStreamRequest(HttpMethod.Post, "/chat/completions", requestJson,
-                cancellationToken);
-
-        await foreach (var s in stream)
-        {
-            var chunk = JsonConvert.DeserializeObject<Chunk>(s);
-            yield return chunk;
-        }
+        return stream;
     }
 
     public record struct ResponseFormat

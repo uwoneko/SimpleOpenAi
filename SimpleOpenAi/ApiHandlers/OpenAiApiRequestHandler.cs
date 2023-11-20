@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace SimpleOpenAi.ApiHandlers;
 
@@ -48,24 +49,37 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         HttpClient = new HttpClient(httpClientHandler, disposeHandler: true);
     }
 
-    public async Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body, CancellationToken cancellationToken = default)
+    public async Task<T> SendRequestAsync<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body,
+        CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
-        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+        if (body != null)
+        {
+            var requestBody = new Dictionary<string, object?>(
+                body.Where(p => p.Value != null));
+            
+            request.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+        }
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
 
         var response = await HttpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
     }
 
 
-    public async IAsyncEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body,
+    public async IAsyncEnumerable<T> SendRequestStreaming<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body, 
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
-        request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+        if (body != null)
+        {
+            var requestBody = new Dictionary<string, object?>(
+                body.Where(p => p.Value != null));
+            
+            request.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+        }
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
         
         var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
@@ -82,7 +96,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 
             if (dataString == "[DONE]") break;
 
-            yield return dataString;
+            yield return JsonConvert.DeserializeObject<T>(dataString)!;
             
             if(cancellationToken.IsCancellationRequested) break;
         }

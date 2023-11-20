@@ -34,15 +34,9 @@ public class ImageGenerations
             { "response_format", "url" }
         };
 
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
+        var result = await _openAiApiRequestHandler.SendRequestAsync<UrlResult>(
+            HttpMethod.Post, "/images/generations", parameters, cancellationToken);
 
-        var requestJson = JsonConvert.SerializeObject(parameters);
-
-        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/images/generations",
-            requestJson, cancellationToken);
-
-        var result = JsonConvert.DeserializeObject<UrlResult>(response);
         return result;
     }
 
@@ -68,15 +62,9 @@ public class ImageGenerations
             { "response_format", "b64_json" }
         };
 
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
+        var result = await _openAiApiRequestHandler.SendRequestAsync<Base64Result>(
+            HttpMethod.Post, "/images/generations", parameters, cancellationToken);
 
-        var requestJson = JsonConvert.SerializeObject(parameters);
-
-        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/images/generations",
-            requestJson, cancellationToken);
-
-        var result = JsonConvert.DeserializeObject<Base64Result>(response);
         return result;
     }
 

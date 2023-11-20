@@ -2,8 +2,8 @@ namespace SimpleOpenAi.ApiHandlers;
 
 public interface IOpenAiApiRequestHandler
 {
-    Task<string> SendStringRequestAsync(HttpMethod httpMethod, string endpoint, string? body,
+    Task<T> SendRequestAsync<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body,
         CancellationToken cancellationToken = default);
-    IAsyncEnumerable<string> SendStreamRequest(HttpMethod httpMethod, string endpoint, string? body, 
+    IAsyncEnumerable<T> SendRequestStreaming<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body, 
         CancellationToken cancellationToken = default);
 }
