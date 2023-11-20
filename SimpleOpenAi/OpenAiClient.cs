@@ -24,6 +24,8 @@ public class OpenAiClient
     public ChatCompletions Chat;
 
     public ImageGenerations Images;
+    
+    public Embeddings Embeddings;
 
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
@@ -31,5 +33,6 @@ public class OpenAiClient
         _apiRequestHandler = new OpenAiApiRequestHandler(_apiKeyProvider, apiBase);
         Chat = new ChatCompletions(_apiRequestHandler);
         Images = new ImageGenerations(_apiRequestHandler);
+        Embeddings = new Embeddings(_apiRequestHandler);
     }
 }
