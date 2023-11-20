@@ -7,24 +7,136 @@ namespace SimpleOpenAi.Endpoints;
 
 public class ChatCompletions
 {
+    private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
+
+    public ChatCompletions(IOpenAiApiRequestHandler openAiApiRequestHandler)
+    {
+        _openAiApiRequestHandler = openAiApiRequestHandler;
+    }
+
+    
+    public async Task<Result> CreateAsync(
+        IEnumerable<ChatMessage> messages,
+        string model = "gpt-3.5-turbo",
+        int? maxTokens = null,
+        int? n = null,
+        double? presencePenalty = null,
+        double? frequencyPenalty = null,
+        double? temperature = null,
+        double? topP = null,
+        string? stop = null,
+        string? user = null,
+        int? seed = null,
+        Dictionary<int, int>? logitBias = null,
+        ResponseFormat? responseFormat = null,
+        IEnumerable<ToolDeclaration>? tools = null,
+        string? toolChoice = null,
+        CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            { "model", model },
+            { "messages", messages },
+            { "max_tokens", maxTokens },
+            { "n", n },
+            { "presence_penalty", presencePenalty },
+            { "frequency_penalty", frequencyPenalty },
+            { "temperature", temperature },
+            { "top_p", topP },
+            { "stop", stop },
+            { "stream", false },
+            { "user", user },
+            { "logit_bias", logitBias },
+            { "response_format", responseFormat },
+            { "seed", seed },
+            { "tools", tools },
+            { "tool_choice", toolChoice }
+        };
+
+        parameters = parameters.Where(p => p.Value != null)
+            .ToDictionary(p => p.Key, p => p.Value);
+
+        var requestJson = JsonConvert.SerializeObject(parameters);
+
+        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/chat/completions",
+            requestJson, cancellationToken);
+
+        var result = JsonConvert.DeserializeObject<Result>(response);
+        return result;
+    }
+
+    public async IAsyncEnumerable<Chunk> CreateStreaming(
+        IEnumerable<ChatMessage> messages,
+        string model = "gpt-3.5-turbo",
+        int? maxTokens = null,
+        int? n = null,
+        double? presencePenalty = null,
+        double? frequencyPenalty = null,
+        double? temperature = null,
+        double? topP = null,
+        string? stop = null,
+        string? user = null,
+        int? seed = null,
+        Dictionary<int, int>? logitBias = null,
+        ResponseFormat? responseFormat = null,
+        IEnumerable<ToolDeclaration>? tools = null,
+        string? toolChoice = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            { "model", model },
+            { "messages", messages },
+            { "max_tokens", maxTokens },
+            { "n", n },
+            { "presence_penalty", presencePenalty },
+            { "frequency_penalty", frequencyPenalty },
+            { "temperature", temperature },
+            { "top_p", topP },
+            { "stop", stop },
+            { "stream", true },
+            { "user", user },
+            { "logit_bias", logitBias },
+            { "response_format", responseFormat },
+            { "seed", seed },
+            { "tools", tools },
+            { "tool_choice", toolChoice }
+        };
+
+        parameters = parameters.Where(p => p.Value != null)
+            .ToDictionary(p => p.Key, p => p.Value);
+
+        var requestJson = JsonConvert.SerializeObject(parameters);
+
+        var stream =
+            _openAiApiRequestHandler.SendStreamRequest(HttpMethod.Post, "/chat/completions", requestJson,
+                cancellationToken);
+
+        await foreach (var s in stream)
+        {
+            var chunk = JsonConvert.DeserializeObject<Chunk>(s);
+            yield return chunk;
+        }
+    }
+
     public record struct ResponseFormat
     (
         [property: JsonProperty("type")] string Type
     );
-    
+
     public record struct FunctionDeclaration
     (
         [property: JsonProperty("name")] string Name,
         [property: JsonProperty("description")] string Description,
         [property: JsonProperty("parameters")] JSchema Parameters
     );
-    
+
     public record struct ToolDeclaration
     (
         [property: JsonProperty("type")] string Type,
         [property: JsonProperty("function")] FunctionDeclaration FunctionDeclaration
     );
-    
+
     public record struct ToolCall
     (
         [property: JsonProperty("id")] string? Id,
@@ -71,7 +183,7 @@ public class ChatCompletions
     )
     {
         /// <summary>
-        /// Points to the first message's content
+        ///     Points to the first message's content
         /// </summary>
         public string Content => Choices[0].Message.Content!;
 
@@ -92,121 +204,13 @@ public class ChatCompletions
     )
     {
         /// <summary>
-        /// Points to the first message's content
+        ///     Points to the first message's content
         /// </summary>
         public string Content => Choices[0].Delta.Content!;
 
         public static explicit operator string(Chunk result)
         {
             return result.Content;
-        }
-    }
-        
-    private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
-
-    public ChatCompletions(IOpenAiApiRequestHandler openAiApiRequestHandler)
-    {
-        _openAiApiRequestHandler = openAiApiRequestHandler;
-    }
-
-    public async Task<Result> CreateAsync(
-        IEnumerable<ChatMessage> messages, 
-        string model = "gpt-3.5-turbo",
-        int? maxTokens = null, 
-        int? n = null,
-        double? presencePenalty = null, 
-        double? frequencyPenalty = null, 
-        double? temperature = null, 
-        double? topP = null, 
-        string? stop = null, 
-        string? user = null, 
-        int? seed = null, 
-        Dictionary<int, int>? logitBias = null, 
-        ResponseFormat? responseFormat = null, 
-        IEnumerable<ToolDeclaration>? tools = null, 
-        string? toolChoice = null, 
-        CancellationToken cancellationToken = default)
-    {
-        var parameters = new Dictionary<string, object?>
-        {
-            { "model", model },
-            { "messages", messages },
-            { "max_tokens", maxTokens },
-            { "n", n },
-            { "presence_penalty", presencePenalty },
-            { "frequency_penalty", frequencyPenalty },
-            { "temperature", temperature },
-            { "top_p", topP },
-            { "stop", stop },
-            { "stream", false },
-            { "user", user },
-            { "logit_bias", logitBias },
-            { "response_format", responseFormat },
-            { "seed", seed },
-            { "tools", tools },
-            { "tool_choice", toolChoice },
-        };
-
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
-
-        var requestJson = JsonConvert.SerializeObject(parameters);
-    
-        var response = await _openAiApiRequestHandler.SendStringRequestAsync(HttpMethod.Post, "/chat/completions", requestJson, cancellationToken);
-        
-        var result = JsonConvert.DeserializeObject<Result>(response);
-        return result;
-    }
-
-    public async IAsyncEnumerable<Chunk> CreateStreaming(
-        IEnumerable<ChatMessage> messages, 
-        string model = "gpt-3.5-turbo",
-        int? maxTokens = null, 
-        int? n = null,
-        double? presencePenalty = null, 
-        double? frequencyPenalty = null, 
-        double? temperature = null, 
-        double? topP = null, 
-        string? stop = null, 
-        string? user = null, 
-        int? seed = null, 
-        Dictionary<int, int>? logitBias = null, 
-        ResponseFormat? responseFormat = null, 
-        IEnumerable<ToolDeclaration>? tools = null, 
-        string? toolChoice = null, 
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var parameters = new Dictionary<string, object?>
-        {
-            { "model", model },
-            { "messages", messages },
-            { "max_tokens", maxTokens },
-            { "n", n },
-            { "presence_penalty", presencePenalty },
-            { "frequency_penalty", frequencyPenalty },
-            { "temperature", temperature },
-            { "top_p", topP },
-            { "stop", stop },
-            { "stream", true },
-            { "user", user },
-            { "logit_bias", logitBias },
-            { "response_format", responseFormat },
-            { "seed", seed },
-            { "tools", tools },
-            { "tool_choice", toolChoice },
-        };
-
-        parameters = parameters.Where(p => p.Value != null)
-            .ToDictionary(p => p.Key, p => p.Value);
-
-        var requestJson = JsonConvert.SerializeObject(parameters);
-    
-        var stream = _openAiApiRequestHandler.SendStreamRequest(HttpMethod.Post, "/chat/completions", requestJson, cancellationToken);
-        
-        await foreach (var s in stream)
-        {
-            var chunk = JsonConvert.DeserializeObject<Chunk>(s);
-            yield return chunk;
         }
     }
 }
