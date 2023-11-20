@@ -1,6 +1,5 @@
 # Image generations
 
-Provides an implementation of OpenAI API's image generations.
 https://platform.openai.com/docs/api-reference/images
 
 Differences from OpenAI doc:

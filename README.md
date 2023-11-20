@@ -11,3 +11,4 @@ Switch to `0.1.0` branch if you want the old version.
 ## Examples:
 - [Chat completions](./Docs/ChatCompletions.md)
 - [Image generations](./Docs/ImageGenerations.md)
+- [Embeddings](./Docs/Embeddings.md)

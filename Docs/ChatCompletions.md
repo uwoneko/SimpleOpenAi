@@ -1,6 +1,5 @@
 # Chat completions
 
-Provides an implementation of OpenAI API's chat completions.
 https://platform.openai.com/docs/api-reference/chat
 
 Differences from OpenAI doc:
