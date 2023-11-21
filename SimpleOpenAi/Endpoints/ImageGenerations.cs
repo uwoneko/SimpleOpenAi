@@ -12,6 +12,10 @@ public class ImageGenerations
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
 
+    /// <summary>
+    /// Creates an image given a prompt.
+    /// </summary>
+    /// <returns>A <see cref="UrlResult"/> object with the url to the generated image.</returns>
     public async Task<UrlResult> CreateUrlAsync(
         string prompt,
         string model = "dall-e-2",
@@ -40,6 +44,10 @@ public class ImageGenerations
         return result;
     }
 
+    /// <summary>
+    /// Creates an image given a prompt.
+    /// </summary>
+    /// <returns>A <see cref="Base64Result"/> object with raw bytes of the generated image.</returns>
     public async Task<Base64Result> CreateBytesAsync(
         string prompt,
         string model = "dall-e-2",

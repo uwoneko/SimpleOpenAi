@@ -14,7 +14,10 @@ public class ChatCompletions
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
 
-    
+    /// <summary>
+    /// Creates a model response for the given chat conversation.
+    /// https://platform.openai.com/docs/api-reference/chat/create
+    /// </summary>
     public async Task<Result> CreateAsync(
         IEnumerable<ChatMessage> messages,
         string model = "gpt-3.5-turbo",
@@ -59,6 +62,10 @@ public class ChatCompletions
         return result;
     }
 
+    /// <summary>
+    /// Streams a model response for the given chat conversation.
+    /// https://platform.openai.com/docs/api-reference/chat/create
+    /// </summary>
     public IAsyncEnumerable<Chunk> CreateStreaming(
         IEnumerable<ChatMessage> messages,
         string model = "gpt-3.5-turbo",

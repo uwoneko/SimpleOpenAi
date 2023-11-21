@@ -12,6 +12,10 @@ public class Embeddings
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
 
+    /// <summary>
+    /// Creates an embedding vector representing the input text.
+    /// https://platform.openai.com/docs/api-reference/embeddings/create
+    /// </summary>
     public async Task<Result> CreateAsync(
         string input,
         string model = "text-embedding-ada-002",
@@ -32,6 +36,10 @@ public class Embeddings
         return result;
     }
 
+    /// <summary>
+    /// Creates an embedding vector representing the input texts.
+    /// https://platform.openai.com/docs/api-reference/embeddings/create
+    /// </summary>
     public async Task<Result> CreateAsync(
         IEnumerable<string> input,
         string model = "text-embedding-ada-002",
@@ -52,13 +60,15 @@ public class Embeddings
         return result;
     }
 
+    /// <summary>
+    /// https://platform.openai.com/docs/api-reference/embeddings/object
+    /// </summary>
     public record struct EmbeddingObject
     (
         [property: JsonProperty("object")] string Object,
         [property: JsonProperty("index")] int Index,
         [property: JsonProperty("embedding")] float[] Embedding
     );
-
     public record struct Result
     (
         [property: JsonProperty("data")] IReadOnlyList<EmbeddingObject> Data,
