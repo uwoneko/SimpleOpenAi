@@ -6,8 +6,8 @@ namespace SimpleOpenAi;
 
 public class OpenAiClient
 {
-    private OpenAiApiRequestHandler _apiRequestHandler;
-    private OpenAiApiKeyProvider _apiKeyProvider;
+    private readonly OpenAiApiRequestHandler _apiRequestHandler;
+    private readonly OpenAiApiKeyProvider _apiKeyProvider;
 
     public string ApiKey
     {
@@ -21,11 +21,11 @@ public class OpenAiClient
         set => _apiRequestHandler.ApiBase = value;
     }
 
-    public ChatCompletions Chat;
+    public readonly ChatCompletions Chat;
 
-    public ImageGenerations Images;
+    public readonly ImageGenerations Images;
     
-    public Embeddings Embeddings;
+    public readonly Embeddings Embeddings;
 
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
