@@ -8,6 +8,16 @@ Differences from OpenAI doc:
 
 
 ## Examples:
+Single:
+```csharp
+using SimpleOpenAi;
+using Newtonsoft.Json;
+
+var result = await OpenAi.Embeddings.CreateAsync("Meow!");
+
+var embeddingJson = JsonConvert.SerializeObject(result.Embedding);
+Console.WriteLine(embeddingJson);
+```
 Multiple:
 ```csharp
 using SimpleOpenAi;
@@ -20,14 +30,4 @@ foreach(var data in result.Data)
     var embeddingJson = JsonConvert.SerializeObject(data.Embedding);
     Console.WriteLine(embeddingJson);
 }
-```
-Single:
-```csharp
-using SimpleOpenAi;
-using Newtonsoft.Json;
-
-var result = await OpenAi.Embeddings.CreateAsync("Meow!");
-
-var embeddingJson = JsonConvert.SerializeObject(result.Embedding);
-Console.WriteLine(embeddingJson);
 ```
