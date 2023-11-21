@@ -80,7 +80,6 @@ var tools = new ChatCompletions.ToolDeclaration[]
 var result = await OpenAi.Chat.CreateAsync(messages, 
     model: "gpt-4-1106-preview", tools: tools);
 
-Console.WriteLine(
-    JsonConvert.SerializeObject(
-    result.Choices[0].Message, Formatting.Indented));
+var resultJson = JsonConvert.SerializeObject(result.Choices[0].Message, Formatting.Indented);
+Console.WriteLine(resultJson);
 ```
