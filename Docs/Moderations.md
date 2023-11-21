@@ -9,6 +9,7 @@ None
 Single:
 ```csharp
 using SimpleOpenAi;
+using Newtonsoft.Json;
 
 var result = await OpenAi.Moderations.CreateAsync("kill your self");
 
@@ -18,6 +19,7 @@ Console.WriteLine(resultJson);
 Multiple:
 ```csharp
 using SimpleOpenAi;
+using Newtonsoft.Json;
 
 var result = await OpenAi.Moderations.CreateAsync(new [] {"kill your self", "dont kill your self"});
 
