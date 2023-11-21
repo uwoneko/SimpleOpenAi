@@ -5,6 +5,7 @@ https://platform.openai.com/docs/api-reference/chat
 Differences from OpenAI doc:
 - `stream` parameter is decided by either `CreateStreaming` or `CreateAsync`
 - `tool_choice` can only be a string
+- Vision is not currently supported
 - Shortcuts for results, `result.Choices[0].Message.Content` can be replaced with `result.Content` or `(string)result`
 
 ## Examples:
