@@ -15,3 +15,4 @@ Nuget coming soon.
 - [Chat completions](./Docs/ChatCompletions.md)
 - [Image generations](./Docs/ImageGenerations.md)
 - [Embeddings](./Docs/Embeddings.md)
+- [Moderations](./Docs/Moderations.md)
