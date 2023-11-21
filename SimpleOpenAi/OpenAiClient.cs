@@ -26,6 +26,8 @@ public class OpenAiClient
     public readonly ImageGenerations Images;
     
     public readonly Embeddings Embeddings;
+    
+    public readonly Moderations Moderations;
 
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
@@ -34,5 +36,6 @@ public class OpenAiClient
         Chat = new ChatCompletions(_apiRequestHandler);
         Images = new ImageGenerations(_apiRequestHandler);
         Embeddings = new Embeddings(_apiRequestHandler);
+        Moderations = new Moderations(_apiRequestHandler);
     }
 }

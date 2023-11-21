@@ -23,4 +23,6 @@ public static class OpenAi
     public static ImageGenerations Images => ClientInstance.Images;
     
     public static Embeddings Embeddings => ClientInstance.Embeddings;
+    
+    public static Moderations Moderations => ClientInstance.Moderations;
 }
