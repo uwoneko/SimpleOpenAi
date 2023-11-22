@@ -1,9 +1,10 @@
 # Embeddings
 
-https://platform.openai.com/docs/api-reference/chat
+https://platform.openai.com/docs/api-reference/embeddings
 
 Differences from OpenAI doc:
-- `encoding_format` parameter is forced to `float`
+- `encoding_format` parameter is decided by `CreateAsync` (base64) and `CreateFloatsAsync` (float)
+  - `CreateAsync` will still have a float array to use
 - Shortcuts for results, `result.Data[0].Embedding` can be replaced with `result.Embedding`
 
 
