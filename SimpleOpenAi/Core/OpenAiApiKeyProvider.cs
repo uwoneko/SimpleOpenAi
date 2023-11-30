@@ -1,4 +1,4 @@
-namespace SimpleOpenAi.ApiHandlers;
+namespace SimpleOpenAi.Core;
 
 public class OpenAiApiKeyProvider : IOpenAiKeyProvider
 {

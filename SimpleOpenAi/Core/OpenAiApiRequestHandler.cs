@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace SimpleOpenAi.ApiHandlers;
+namespace SimpleOpenAi.Core;
 
 public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 {

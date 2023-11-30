@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using SimpleOpenAi.ApiHandlers;
+using SimpleOpenAi.Core;
 
-namespace SimpleOpenAi.Endpoints;
+namespace SimpleOpenAi.Embedding;
 
 public class Embeddings
 {

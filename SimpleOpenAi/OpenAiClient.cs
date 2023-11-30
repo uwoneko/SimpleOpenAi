@@ -1,6 +1,8 @@
-using SimpleOpenAi.ApiHandlers;
-using SimpleOpenAi;
-using SimpleOpenAi.Endpoints;
+using SimpleOpenAi.Chat;
+using SimpleOpenAi.Core;
+using SimpleOpenAi.Embedding;
+using SimpleOpenAi.Image;
+using SimpleOpenAi.Moderation;
 
 namespace SimpleOpenAi;
 

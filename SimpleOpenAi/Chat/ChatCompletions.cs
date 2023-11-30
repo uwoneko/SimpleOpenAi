@@ -1,9 +1,8 @@
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
-using SimpleOpenAi.ApiHandlers;
+using SimpleOpenAi.Core;
 
-namespace SimpleOpenAi.Endpoints;
+namespace SimpleOpenAi.Chat;
 
 public class ChatCompletions
 {
@@ -19,7 +18,7 @@ public class ChatCompletions
     /// https://platform.openai.com/docs/api-reference/chat/create
     /// </summary>
     public async Task<Result> CreateAsync(
-        IEnumerable<ChatMessage> messages,
+        IEnumerable<Message> messages,
         string model = "gpt-3.5-turbo",
         int? maxTokens = null,
         int? n = null,
@@ -67,7 +66,7 @@ public class ChatCompletions
     /// https://platform.openai.com/docs/api-reference/chat/create
     /// </summary>
     public IAsyncEnumerable<Chunk> CreateStreaming(
-        IEnumerable<ChatMessage> messages,
+        IEnumerable<Message> messages,
         string model = "gpt-3.5-turbo",
         int? maxTokens = null,
         int? n = null,
@@ -145,14 +144,14 @@ public class ChatCompletions
     (
         [property: JsonProperty("finish_reason")] string FinishReason,
         [property: JsonProperty("index")] int Index,
-        [property: JsonProperty("message")] ChatMessage Message
+        [property: JsonProperty("message")] Message Message
     );
 
     public record struct StreamChoice
     (
         [property: JsonProperty("finish_reason")] string? FinishReason,
         [property: JsonProperty("index")] int Index,
-        [property: JsonProperty("delta")] ChatMessage Delta
+        [property: JsonProperty("delta")] Message Delta
     );
 
     public record struct Usage

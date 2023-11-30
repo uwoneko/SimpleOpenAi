@@ -1,9 +1,8 @@
 using Newtonsoft.Json;
-using SimpleOpenAi.Endpoints;
 
-namespace SimpleOpenAi;
+namespace SimpleOpenAi.Chat;
 
-public record struct ChatMessage(
+public record struct Message(
     [property: JsonProperty("role")] string Role,
     [property: JsonProperty("content")] string? Content,
     [property: JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)] string? Name = null,
