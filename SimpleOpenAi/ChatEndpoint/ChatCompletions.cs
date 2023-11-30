@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using SimpleOpenAi.Core;
 
-namespace SimpleOpenAi.Chat;
+namespace SimpleOpenAi.ChatEndpoint;
 
 public class ChatCompletions
 {

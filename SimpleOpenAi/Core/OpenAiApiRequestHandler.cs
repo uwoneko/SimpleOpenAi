@@ -65,7 +65,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         var response = await HttpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
+        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(cancellationToken))!;
     }
 
 
@@ -85,7 +85,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var stream = await response.Content.ReadAsStreamAsync();
+        var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
         using var reader = new StreamReader(stream);
         
         while (await reader.ReadLineAsync() is { } line)
@@ -127,6 +127,6 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         var response = await HttpClient.SendAsync(request, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
+        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(cancellationToken))!;
     }
 }

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using SimpleOpenAi.Core;
 
-namespace SimpleOpenAi.Image;
+namespace SimpleOpenAi.ImagesEndpoint;
 
 public class ImageGenerations
 {

@@ -1,8 +1,8 @@
-using SimpleOpenAi.Chat;
+using SimpleOpenAi.ChatEndpoint;
 using SimpleOpenAi.Core;
-using SimpleOpenAi.Embedding;
-using SimpleOpenAi.Image;
-using SimpleOpenAi.Moderation;
+using SimpleOpenAi.EmbeddingsEndpoint;
+using SimpleOpenAi.ImagesEndpoint;
+using SimpleOpenAi.ModerationsEndpoint;
 
 namespace SimpleOpenAi;
 

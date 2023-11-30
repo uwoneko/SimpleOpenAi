@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using SimpleOpenAi.Core;
 
-namespace SimpleOpenAi.Moderation;
+namespace SimpleOpenAi.ModerationsEndpoint;
 
 public class Moderations
 {
