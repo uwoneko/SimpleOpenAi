@@ -32,7 +32,7 @@ public class Embeddings
             { "encoding_format", "float" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<FloatsResult>(
+        var result = await _openAiApiRequestHandler.SendAsync<FloatsResult>(
             HttpMethod.Post, "/embeddings", parameters, cancellationToken);
 
         return result;
@@ -58,7 +58,7 @@ public class Embeddings
             { "encoding_format", "float" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<FloatsResult>(
+        var result = await _openAiApiRequestHandler.SendAsync<FloatsResult>(
             HttpMethod.Post, "/embeddings", parameters, cancellationToken);
 
         return result;
@@ -82,7 +82,7 @@ public class Embeddings
             { "encoding_format", "base64" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Base64Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Base64Result>(
             HttpMethod.Post, "/embeddings", parameters, cancellationToken);
 
         return result;
@@ -106,7 +106,7 @@ public class Embeddings
             { "encoding_format", "base64" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Base64Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Base64Result>(
             HttpMethod.Post, "/embeddings", parameters, cancellationToken);
 
         return result;

@@ -49,7 +49,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         HttpClient = new HttpClient(httpClientHandler, disposeHandler: true);
     }
 
-    public async Task<T> SendRequestAsync<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body,
+    public async Task<T> SendAsync<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body,
         CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
@@ -69,7 +69,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
     }
 
 
-    public async IAsyncEnumerable<T> SendRequestStreaming<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body, 
+    public async IAsyncEnumerable<T> SendStreaming<T>(HttpMethod httpMethod, string endpoint, Dictionary<string, object?>? body, 
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var request = new HttpRequestMessage(httpMethod, $"{ApiBase}{endpoint}");
@@ -100,5 +100,33 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
             
             if(cancellationToken.IsCancellationRequested) break;
         }
+    }
+    
+
+    public async Task<T> PostMultipartAsync<T>(string endpoint, Dictionary<string, object?>? body,
+        CancellationToken cancellationToken = default)
+    {
+        using var content = new MultipartFormDataContent();
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiBase}{endpoint}");
+        if (body != null)
+        {
+            foreach (var (name, value) in body.Where(p => p.Value != null))
+            {
+                if(value is byte[] bytes)
+                    content.Add(new ByteArrayContent(bytes), name);
+                if(value is Stream stream)
+                    content.Add(new StreamContent(stream), name);
+                else
+                    content.Add(new StringContent(value!.ToString()!), JsonConvert.SerializeObject(name));
+            }
+            
+            request.Content = content;
+        }
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
+
+        var response = await HttpClient.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
     }
 }

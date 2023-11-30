@@ -55,7 +55,7 @@ public class ChatCompletions
             { "tool_choice", toolChoice }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Result>(
             HttpMethod.Post, "/chat/completions", parameters, cancellationToken);
         
         return result;
@@ -103,7 +103,7 @@ public class ChatCompletions
             { "tool_choice", toolChoice }
         };
 
-        var stream = _openAiApiRequestHandler.SendRequestStreaming<Chunk>(
+        var stream = _openAiApiRequestHandler.SendStreaming<Chunk>(
             HttpMethod.Post, "/chat/completions", parameters, cancellationToken);
 
         return stream;

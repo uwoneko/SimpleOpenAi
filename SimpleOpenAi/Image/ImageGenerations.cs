@@ -38,7 +38,7 @@ public class ImageGenerations
             { "response_format", "url" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<UrlResult>(
+        var result = await _openAiApiRequestHandler.SendAsync<UrlResult>(
             HttpMethod.Post, "/images/generations", parameters, cancellationToken);
 
         return result;
@@ -70,7 +70,7 @@ public class ImageGenerations
             { "response_format", "b64_json" }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Base64Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Base64Result>(
             HttpMethod.Post, "/images/generations", parameters, cancellationToken);
 
         return result;

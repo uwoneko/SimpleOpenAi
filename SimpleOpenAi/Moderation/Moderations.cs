@@ -27,7 +27,7 @@ public class Moderations
             { "model", model }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Result>(
             HttpMethod.Post, "/moderations", parameters, cancellationToken);
 
         return result;
@@ -48,7 +48,7 @@ public class Moderations
             { "model", model }
         };
 
-        var result = await _openAiApiRequestHandler.SendRequestAsync<Result>(
+        var result = await _openAiApiRequestHandler.SendAsync<Result>(
             HttpMethod.Post, "/moderations", parameters, cancellationToken);
 
         return result;
