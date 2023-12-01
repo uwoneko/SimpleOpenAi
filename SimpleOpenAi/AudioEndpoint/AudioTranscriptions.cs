@@ -5,14 +5,14 @@ namespace SimpleOpenAi.AudioEndpoint;
 
 public class AudioTranscriptions
 {
-    private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
+    private readonly IOpenAiApiMultipartRequestHandler _openAiApiMultipartRequestHandler;
 
-    public AudioTranscriptions(IOpenAiApiRequestHandler openAiApiRequestHandler)
+    public AudioTranscriptions(IOpenAiApiMultipartRequestHandler openAiApiMultipartRequestHandler)
     {
-        _openAiApiRequestHandler = openAiApiRequestHandler;
+        _openAiApiMultipartRequestHandler = openAiApiMultipartRequestHandler;
     }
 
-    public async Task<Result> CreateAsync(
+    public async Task<JsonResult> CreateAsync(
         Stream file, 
         string fileName, 
         string model = "whisper-1", 
@@ -27,6 +27,7 @@ public class AudioTranscriptions
             { "language", language },
             { "prompt", prompt },
             { "temperature", temperature },
+            { "response_format", "json" },
         };
 
         var files = new Dictionary<string, MultipartRequestFile?>
@@ -34,13 +35,13 @@ public class AudioTranscriptions
             { "file", new MultipartRequestFile(file, fileName) }
         };
 
-        var result = await _openAiApiRequestHandler.PostMultipartAsync<Result>(
+        var result = await _openAiApiMultipartRequestHandler.PostMultipartAsync<JsonResult>(
             "/audio/transcriptions", parameters, files, cancellationToken);
 
         return result;
     }
 
-    public Task<Result> CreateAsync(
+    public Task<JsonResult> CreateAsync(
         FileStream file,
         string model = "whisper-1",
         string? language = null,
@@ -51,7 +52,7 @@ public class AudioTranscriptions
         return CreateAsync(file, file.Name, model, language, prompt, temperature, cancellationToken);
     }
 
-    public async Task<Result> CreateAsync(
+    public async Task<JsonResult> CreateAsync(
         byte[] fileBytes,
         string fileName,
         string model = "whisper-1",
@@ -64,8 +65,85 @@ public class AudioTranscriptions
         return await CreateAsync(file, fileName, model, language, prompt, temperature, cancellationToken);
     }
 
-    public record struct Result
+    public async Task<VerboseJsonResult> CreateVerboseAsync(
+        Stream file, 
+        string fileName, 
+        string model = "whisper-1", 
+        string? language = null, 
+        string? prompt = null, 
+        float? temperature = null,
+        CancellationToken cancellationToken = default)
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            { "model", model },
+            { "language", language },
+            { "prompt", prompt },
+            { "temperature", temperature },
+            { "response_format", "verbose_json" },
+        };
+
+        var files = new Dictionary<string, MultipartRequestFile?>
+        {
+            { "file", new MultipartRequestFile(file, fileName) }
+        };
+
+        var result = await _openAiApiMultipartRequestHandler.PostMultipartAsync<VerboseJsonResult>(
+            "/audio/transcriptions", parameters, files, cancellationToken);
+
+        return result;
+    }
+
+    public Task<VerboseJsonResult> CreateVerboseAsync(
+        FileStream file,
+        string model = "whisper-1",
+        string? language = null,
+        string? prompt = null,
+        float? temperature = null,
+        CancellationToken cancellationToken = default)
+    {
+        return CreateVerboseAsync(file, file.Name, model, language, prompt, temperature, cancellationToken);
+    }
+
+    public async Task<VerboseJsonResult> CreateVerboseAsync(
+        byte[] fileBytes,
+        string fileName,
+        string model = "whisper-1",
+        string? language = null,
+        string? prompt = null,
+        float? temperature = null,
+        CancellationToken cancellationToken = default)
+    {
+        using var file = new MemoryStream(fileBytes);
+        return await CreateVerboseAsync(file, fileName, model, language, prompt, temperature, cancellationToken);
+    }
+
+    public record struct JsonResult
     (
         [property: JsonProperty("text")] string Text
     );
+    
+    public record struct VerboseJsonResult
+    (
+        [property: JsonProperty("task")] string Task,
+        [property: JsonProperty("language")] string Language,
+        [property: JsonProperty("duration")] double Duration,
+        [property: JsonProperty("text")] string Text,
+        [property: JsonProperty("segments")] IReadOnlyList<Segment> Segments
+    );
+
+    public record struct Segment
+    (
+        [property: JsonProperty("id")] int Id,
+        [property: JsonProperty("seek")] int Seek,
+        [property: JsonProperty("start")] double Start,
+        [property: JsonProperty("end")] double End,
+        [property: JsonProperty("text")] string Text,
+        [property: JsonProperty("tokens")] IReadOnlyList<int> Tokens,
+        [property: JsonProperty("temperature")] double Temperature,
+        [property: JsonProperty("avg_logprob")] double AvgLogprob,
+        [property: JsonProperty("compression_ratio")] double CompressionRatio,
+        [property: JsonProperty("no_speech_prob")] double NoSpeechProb
+    );
+
 }

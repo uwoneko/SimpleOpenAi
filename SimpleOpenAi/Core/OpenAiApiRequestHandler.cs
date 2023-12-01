@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace SimpleOpenAi.Core;
 
 // i go here, fix one thing and hope to never come back again
-public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
+public class OpenAiApiRequestHandler : IOpenAiApiMultipartRequestHandler, IOpenAiApiStreamHandler
 {
     public string ApiBase { get; set; }
     private readonly IOpenAiKeyProvider _openAiKeyProvider;
@@ -108,7 +108,6 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         }
     }
     
-
     public async Task<T> PostMultipartAsync<T>(string endpoint, Dictionary<string, object?>? body,
         Dictionary<string, MultipartRequestFile?>? files,
         CancellationToken cancellationToken = default)
@@ -142,5 +141,40 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
             throw new OpenAiRequestException(response.StatusCode, responseContent);
 
         return JsonConvert.DeserializeObject<T>(responseContent)!;
+    }
+
+    public async Task<string> PostMultipartNonJsonAsync<T>(string endpoint, Dictionary<string, object?>? body,
+        Dictionary<string, MultipartRequestFile?>? files,
+        CancellationToken cancellationToken = default)
+    {
+        using var content = new MultipartFormDataContent();
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{ApiBase}{endpoint}");
+        if (body != null)
+        {
+            foreach (var (name, value) in body.Where(p => p.Value != null))
+            {
+                content.Add(new StringContent(value!.ToString()!), JsonConvert.SerializeObject(name));
+            }
+        }
+        if (files != null)
+        {
+            foreach (var (name, file) in files.Where(p => p.Value != null))
+            {
+                content.Add(new StreamContent(file!.Stream), name, file.Name);
+            }
+        }
+        
+        request.Content = content;
+
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
+
+        var response = await HttpClient.SendAsync(request, cancellationToken);
+        // ReSharper disable once MethodSupportsCancellation
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (response.StatusCode != HttpStatusCode.OK)
+            throw new OpenAiRequestException(response.StatusCode, responseContent);
+
+        return responseContent;
     }
 }

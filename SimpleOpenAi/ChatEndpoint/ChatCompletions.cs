@@ -6,9 +6,9 @@ namespace SimpleOpenAi.ChatEndpoint;
 
 public class ChatCompletions
 {
-    private readonly IOpenAiApiRequestHandler _openAiApiRequestHandler;
+    private readonly IOpenAiApiStreamHandler _openAiApiRequestHandler;
 
-    public ChatCompletions(IOpenAiApiRequestHandler openAiApiRequestHandler)
+    public ChatCompletions(IOpenAiApiStreamHandler openAiApiRequestHandler)
     {
         _openAiApiRequestHandler = openAiApiRequestHandler;
     }
