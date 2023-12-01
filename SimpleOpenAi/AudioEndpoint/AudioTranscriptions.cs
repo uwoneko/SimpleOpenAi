@@ -12,6 +12,10 @@ public class AudioTranscriptions
         _openAiApiMultipartRequestHandler = openAiApiMultipartRequestHandler;
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public async Task<JsonResult> CreateAsync(
         Stream file, 
         string fileName, 
@@ -41,6 +45,10 @@ public class AudioTranscriptions
         return result;
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public Task<JsonResult> CreateAsync(
         FileStream file,
         string model = "whisper-1",
@@ -52,6 +60,10 @@ public class AudioTranscriptions
         return CreateAsync(file, file.Name, model, language, prompt, temperature, cancellationToken);
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public async Task<JsonResult> CreateAsync(
         byte[] fileBytes,
         string fileName,
@@ -65,6 +77,10 @@ public class AudioTranscriptions
         return await CreateAsync(file, fileName, model, language, prompt, temperature, cancellationToken);
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public async Task<VerboseJsonResult> CreateVerboseAsync(
         Stream file, 
         string fileName, 
@@ -94,6 +110,10 @@ public class AudioTranscriptions
         return result;
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public Task<VerboseJsonResult> CreateVerboseAsync(
         FileStream file,
         string model = "whisper-1",
@@ -105,6 +125,10 @@ public class AudioTranscriptions
         return CreateVerboseAsync(file, file.Name, model, language, prompt, temperature, cancellationToken);
     }
 
+    /// <summary>
+    /// Transcribes audio into the input language.
+    /// https://platform.openai.com/docs/api-reference/audio/createTranscription
+    /// </summary>
     public async Task<VerboseJsonResult> CreateVerboseAsync(
         byte[] fileBytes,
         string fileName,
