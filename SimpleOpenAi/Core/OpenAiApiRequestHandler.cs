@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace SimpleOpenAi.Core;
 
+// i go here, fix one thing and hope to never come back again
 public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
 {
     public string ApiBase { get; set; }
@@ -63,9 +64,13 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
 
         var response = await HttpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        // ReSharper disable once MethodSupportsCancellation
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (response.StatusCode != HttpStatusCode.OK)
+            throw new OpenAiRequestException(response.StatusCode, responseContent);
 
-        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(cancellationToken))!;
+        return JsonConvert.DeserializeObject<T>(responseContent)!;
     }
 
 
@@ -85,7 +90,8 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+        // ReSharper disable once MethodSupportsCancellation
+        var stream = await response.Content.ReadAsStreamAsync();
         using var reader = new StreamReader(stream);
         
         while (await reader.ReadLineAsync() is { } line)
@@ -104,6 +110,7 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
     
 
     public async Task<T> PostMultipartAsync<T>(string endpoint, Dictionary<string, object?>? body,
+        Dictionary<string, MultipartRequestFile?>? files,
         CancellationToken cancellationToken = default)
     {
         using var content = new MultipartFormDataContent();
@@ -112,21 +119,28 @@ public class OpenAiApiRequestHandler : IOpenAiApiRequestHandler
         {
             foreach (var (name, value) in body.Where(p => p.Value != null))
             {
-                if(value is byte[] bytes)
-                    content.Add(new ByteArrayContent(bytes), name);
-                if(value is Stream stream)
-                    content.Add(new StreamContent(stream), name);
-                else
-                    content.Add(new StringContent(value!.ToString()!), JsonConvert.SerializeObject(name));
+                content.Add(new StringContent(value!.ToString()!), JsonConvert.SerializeObject(name));
             }
-            
-            request.Content = content;
         }
+        if (files != null)
+        {
+            foreach (var (name, file) in files.Where(p => p.Value != null))
+            {
+                content.Add(new StreamContent(file!.Stream), name, file.Name);
+            }
+        }
+        
+        request.Content = content;
+
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _openAiKeyProvider.Key);
 
         var response = await HttpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        // ReSharper disable once MethodSupportsCancellation
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        if (response.StatusCode != HttpStatusCode.OK)
+            throw new OpenAiRequestException(response.StatusCode, responseContent);
 
-        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync(cancellationToken))!;
+        return JsonConvert.DeserializeObject<T>(responseContent)!;
     }
 }

@@ -1,3 +1,4 @@
+using SimpleOpenAi.AudioEndpoint;
 using SimpleOpenAi.ChatEndpoint;
 using SimpleOpenAi.EmbeddingsEndpoint;
 using SimpleOpenAi.ImagesEndpoint;
@@ -28,4 +29,6 @@ public static class OpenAi
     public static Embeddings Embeddings => ClientInstance.Embeddings;
     
     public static Moderations Moderations => ClientInstance.Moderations;
+    
+    public static AudioTranscriptions AudioTranscriptions => ClientInstance.AudioTranscriptions;
 }

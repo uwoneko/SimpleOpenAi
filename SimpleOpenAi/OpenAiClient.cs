@@ -1,3 +1,4 @@
+using SimpleOpenAi.AudioEndpoint;
 using SimpleOpenAi.ChatEndpoint;
 using SimpleOpenAi.Core;
 using SimpleOpenAi.EmbeddingsEndpoint;
@@ -30,6 +31,8 @@ public class OpenAiClient
     public readonly Embeddings Embeddings;
     
     public readonly Moderations Moderations;
+    
+    public readonly AudioTranscriptions AudioTranscriptions;
 
     public OpenAiClient(string? apiKey = null, string? apiBase = null)
     {
@@ -39,5 +42,6 @@ public class OpenAiClient
         Images = new ImageGenerations(_apiRequestHandler);
         Embeddings = new Embeddings(_apiRequestHandler);
         Moderations = new Moderations(_apiRequestHandler);
+        AudioTranscriptions = new AudioTranscriptions(_apiRequestHandler);
     }
 }
