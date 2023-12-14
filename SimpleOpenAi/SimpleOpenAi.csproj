@@ -5,7 +5,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11.0</LangVersion>
-        <Version>0.2.0</Version>
+        <Version>0.2.1</Version>
         <Title>SimpleOpenAi</Title>
         <Authors>yusp48</Authors>
         <Description>A simple library that makes interacting with OpenAI API easy.</Description>
