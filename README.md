@@ -16,3 +16,4 @@ Nuget coming soon.
 - [Image generations](./Docs/ImageGenerations.md)
 - [Embeddings](./Docs/Embeddings.md)
 - [Moderations](./Docs/Moderations.md)
+- [Audio transcriptions](./Docs/AudioTranscriptions.md)
