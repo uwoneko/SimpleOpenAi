@@ -5,6 +5,18 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11.0</LangVersion>
+        <Version>0.2.0</Version>
+        <Title>SimpleOpenAi</Title>
+        <Authors>yusp48</Authors>
+        <Description>A simple package for OpenAi API</Description>
+        <RepositoryUrl>https://github.com/YuraSuper2048/SimpleOpenAi.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://github.com/YuraSuper2048/SimpleOpenAi</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+        <EmbedAllSources>true</EmbedAllSources>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +24,10 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
